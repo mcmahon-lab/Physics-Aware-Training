@@ -1,47 +1,60 @@
 
 ![title](https://user-images.githubusercontent.com/35846424/115941468-740aef00-a473-11eb-9440-7d086786de35.png)
 <br/><br/>
-This repository facilitiates the training of physical neural networks with a PyTorch-based implementation of Physics-Aware Training.
-<br/><br/>
-## Physical neural networks
-![PNN](https://user-images.githubusercontent.com/35846424/115941478-7c632a00-a473-11eb-9f32-5167f55be062.png)
-<br/><br/>
-Physical neural networks are hierarchical computations whose building blocks are physical systems. 
-<br/><br/>
-
-## Physics-aware training
-![PAT](https://user-images.githubusercontent.com/35846424/115941482-7e2ced80-a473-11eb-88b4-90b7fb784905.png)
-<br/><br/>
-To perform backpropagation through physical systems, the physics-aware training algorithm, as shown above, is used (Wright, L.G. & Onodera, T. *et al* [2021]).
-<br/><br/>
-
-## Users supply a class that executes an experiment
-![define-exp](https://user-images.githubusercontent.com/35846424/115942312-9bfc5180-a477-11eb-9491-a4fe53fc8fa8.png)
-<br/><br/>
-
-## The ExpModule class learns a differentiable model of the experiment
-![instantiate-ExpModule](https://user-images.githubusercontent.com/35846424/115963590-f9cb8080-a4ed-11eb-8bc8-92777de2be24.png)
-<br/><br/>
-
-## A pnn.Module defines the physical neural network
-![define-pnn](https://user-images.githubusercontent.com/35846424/115942317-a28ac900-a477-11eb-9f7c-e639c8557689.png)
-<br/><br/>
-
-# _Physics-Aware Training_ Demo Code
-
-[//]: # (:radioactive: TODO -- insert quick description of what PAT is, what problem it solves, etc., and give links to videos and papers that describe it further)
-
 Physics-aware training (PAT) is a method to train real physical systems with backpropagation. It was introduced in Wright, Logan G. & Onodera, Tatsuhiro *et al* (2021)<sup>[1](#how-to-cite-this-code)</sup> to train physical neural networks (PNNs) - neural networks whose building blocks are physical systems.
-
-[//]: # (:radioactive: TODO -- insert quick description of the purpose of this repo - to let users interested in trying to build Physical Neural Networks using PAT see some examples and also have access to some reference code for implementing PAT)
 
 This repository is a PyTorch-based implementation of Physics-Aware Training. It lets users build Physical Neural Networks and automates many of the necessary steps to train them with Physics-Aware Training. To use an existing physical system as a building block in a neural network, users have to supply a class that receives batches of input data and processes them in the physical system. After specifying the trainable parameters, the system can be trained with this code. The methodology is demonstrated on an illustrative example of (nonlinear) coupled pendula. 
 
 This repository also gives users access to documented reference code to implement or modify PAT.
 
-# Getting started
+## A graphical introduction to *Physical Neural Networks* and *Physics-Aware Trainig*
+<br/><br/>
+### Physical neural networks
+![PNN](https://user-images.githubusercontent.com/35846424/115941478-7c632a00-a473-11eb-9f32-5167f55be062.png)
+<br/><br/>
+Physical neural networks are hierarchical computations whose building blocks are physical systems. The controllable conditions of a physical system are partitioned into inputs (red) and parameters (orange). By letting the system evolve in time, it naturally performs computations until outputs are read out (blue). Physical neural networks exploit these natural computations and enable multi-layered physical computations. Physics-aware training is the algorithm used to find the optimal control parameters.
+<br/><br/>
 
-[//]: # (:radioactive: TODO -- describe where a person completely new to this repo should start)
+### Physics-aware training
+![PAT](https://user-images.githubusercontent.com/35846424/115941482-7e2ced80-a473-11eb-88b4-90b7fb784905.png)
+<br/><br/>
+Physics-aware training (PAT) is a gradient-descent algorithm that allows backpropagation through any physical system for which a digital model can be trained. As shown above, 1. inputs and parameters are sent into the physical system, which 2. propagate through the system. 3. The outputs of the system are compared to the intended outputs and 4. the gradient on the parameters is calculated by the differentiable digital model. 5. With this gradient, the paramters can be updated (Reprinted from Wright, L.G. & Onodera, T. *et al* [2021]). This repository implements the PAT algorithm and simplifies the training of differentiable digital models. Users only need to supply a class that controls the physical system.
+<br/><br/>
+
+### Users supply a class that executes an experiment
+![define-exp](https://user-images.githubusercontent.com/35846424/115942312-9bfc5180-a477-11eb-9491-a4fe53fc8fa8.png)
+<br/><br/>
+
+Users need to supply a class that controls the physical system. When calling an instance of the class, the supplied code needs to initiate a physical computation with the given inputs and parameters.
+
+### The ExpModule class learns a differentiable model of the experiment
+![instantiate-ExpModule](https://user-images.githubusercontent.com/35846424/115963590-f9cb8080-a4ed-11eb-8bc8-92777de2be24.png)
+<br/><br/>
+
+The training of a differentiable digital model is facilitated by the ExpModule class. Users need to characterize the input and output dimensions of the physical system, just like, for example, a `torch.nn.Linear(d_in, d_out)`. Additionally, the trainable parameters and their experimentally allowable ranges need to be specified. Then the code can train a differentiable digital model for the physical system.
+
+### A pnn.Module defines the physical neural network
+![define-pnn](https://user-images.githubusercontent.com/35846424/115942317-a28ac900-a477-11eb-9f7c-e639c8557689.png)
+<br/><br/>
+
+Finally, users need to specify how the physical system is used in a multi-layer Physical Neural Network. These can be trained with a training loop just like any other PyTorch model
+
+# Demonstrations
+
+- [Coupled Pendula on a 2-dimensional dataset](https://github.com/mcmahon-lab/Physics-Aware-Training/blob/master/Example-Pendula%20on%202D%20dataset.ipynb)
+  An illustrative example of coupled pendula classifying simple distributions in a 2-dimensional plane, akin to https://playground.tensorflow.org/. The physical system is controlled by partitioning controllable initial conditions into inputs and parameters, to achieve >90% classification accuracy on multiple datasets.'
+ 
+https://user-images.githubusercontent.com/35846424/115789949-ef956f00-a393-11eb-8814-cf4cb8ada98d.mp4
+ 
+- [Coupled Pendula on vowel dataset](https://github.com/mcmahon-lab/Physics-Aware-Training/blob/master/Example-Coupled%20Pendula%20on%20vowel%20dataset.ipynb) 
+  This example shows the coupled pendula chain solving a slightly more complex task, that of [vowel classification](https://homepages.wmich.edu/~hillenbr/voweldata.html). Here, the       physical system is controlled by changing in-place parameters like the coupling constants and natural frequencies of the pendula to achieve 95% classification accuracy on a vowel classification datasets.
+  
+ ![download](https://user-images.githubusercontent.com/35846424/115791885-3c2e7980-a397-11eb-9a95-ef1804034fe9.png) 
+  
+- [Mechanical Multimode Oscillator on MNIST](https://github.com/mcmahon-lab/Physics-Aware-Training/blob/master/Example-Speaker%20on%20MNIST.ipynb)
+  A simulated replication of the mechanical multimode oscillator example classifying handwritten digits from the MNIST dataset as presented in Wright, Logan G. & Onodera, Tatsuhiro *et al* (2021)[^1].
+
+# Getting started
 
 A convenient starting point to understand the code in this repository is by running the example notebook of coupled pendula classifying points in a 2-dimensional cartesian plane. The notebook walks through all steps of creating and training a Physical Neural Network: 
 
@@ -61,21 +74,6 @@ The backend code associated with each of those steps is in separate files:
 [pnn.py](https://github.com/mcmahon-lab/Physics-Aware-Training/blob/master/pnn.py) contains the pnn.Module class which is an extension of nn.Module and used to define the Physical Neural Network. It also contains code that modifies the training step of a neural network to respect the constraints of a physical system.
 
 The backbone of Physics-Aware Training is a PyTorch Autograd Function that is defined in [lib/pat_utils.py](https://github.com/mcmahon-lab/Physics-Aware-Training/blob/master/lib/pat_utils.py). It passes inputs through the user-supplied physical system on the forward-pass but through the digital model on the backward-pass.
-
-# Demonstrations
-
-- [Coupled Pendula on a 2-dimensional dataset](https://github.com/mcmahon-lab/Physics-Aware-Training/blob/master/Example-Pendula%20on%202D%20dataset.ipynb)
-  An illustrative example of coupled pendula classifying simple distributions in a 2-dimensional plane, akin to https://playground.tensorflow.org/. The physical system is controlled by partitioning controllable initial conditions into inputs and parameters, to achieve >90% classification accuracy on multiple datasets.'
- 
-https://user-images.githubusercontent.com/35846424/115789949-ef956f00-a393-11eb-8814-cf4cb8ada98d.mp4
- 
-- [Coupled Pendula on vowel dataset](https://github.com/mcmahon-lab/Physics-Aware-Training/blob/master/Example-Coupled%20Pendula%20on%20vowel%20dataset.ipynb) 
-  This example shows the coupled pendula chain solving a slightly more complex task, that of [vowel classification](https://homepages.wmich.edu/~hillenbr/voweldata.html). Here, the       physical system is controlled by changing in-place parameters like the coupling constants and natural frequencies of the pendula to achieve 95% classification accuracy on a vowel classification datasets.
-  
- ![download](https://user-images.githubusercontent.com/35846424/115791885-3c2e7980-a397-11eb-9a95-ef1804034fe9.png) 
-  
-- [Mechanical Multimode Oscillator on MNIST](https://github.com/mcmahon-lab/Physics-Aware-Training/blob/master/Example-Speaker%20on%20MNIST.ipynb)
-  A simulated replication of the mechanical multimode oscillator example classifying handwritten digits from the MNIST dataset as presented in Wright, Logan G. & Onodera, Tatsuhiro *et al* (2021)[^1].
 
 ## How you can make it work with your experiments
 
