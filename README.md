@@ -7,7 +7,7 @@ This repository is a PyTorch-based implementation of Physics-Aware Training. It 
 
 This repository also gives users access to documented reference code to implement or modify PAT.
 
-## A graphical introduction to *Physical Neural Networks* and *Physics-Aware Trainig*
+## A graphical introduction to *Physical Neural Networks* and *Physics-Aware Training*
 <br/><br/>
 ### Physical neural networks
 ![PNN](https://user-images.githubusercontent.com/35846424/115941478-7c632a00-a473-11eb-9f32-5167f55be062.png)
