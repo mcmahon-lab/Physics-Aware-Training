@@ -243,7 +243,7 @@ If you use Physics-Aware Training in your research, please consider citing the f
 
 [//]: # (:radioactive: TODO -- insert paper reference)
 
-Logan G. Wright, Tatsuhiro Onodera, Martin M. Stein, Tianyu Wang,1 Darren T. Schachter, Zoey Hu, and Peter L. McMahon (2021). Deep physical neural networks enabled by a backpropagation algorithm for arbitrary physical systems. *Manuscript in preparation.*
+Logan G. Wright, Tatsuhiro Onodera, Martin M. Stein, Tianyu Wang, Darren T. Schachter, Zoey Hu, and Peter L. McMahon (2021). Deep physical neural networks enabled by a backpropagation algorithm for arbitrary physical systems. *Manuscript in preparation.*
 
 # License
 
