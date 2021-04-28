@@ -1,5 +1,5 @@
 
-![title](https://user-images.githubusercontent.com/35846424/115941468-740aef00-a473-11eb-9440-7d086786de35.png)
+![g5382](https://user-images.githubusercontent.com/35846424/116468174-894e9780-a83e-11eb-97a8-88063e1653c0.png)
 <br/><br/>
 Physics-aware training (PAT) is a method to train real physical systems with backpropagation. It was introduced in Wright, Logan G. & Onodera, Tatsuhiro *et al* (2021)<sup>[1](#how-to-cite-this-code)</sup> to train physical neural networks (PNNs) - neural networks whose building blocks are physical systems.
 
