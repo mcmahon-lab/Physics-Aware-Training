@@ -18,58 +18,42 @@ Physical neural networks are hierarchical computations whose building blocks are
 ### Physics-aware training
 ![PAT](https://user-images.githubusercontent.com/35846424/115941482-7e2ced80-a473-11eb-88b4-90b7fb784905.png)
 <br/><br/>
-Physics-aware training (PAT) is a gradient-descent algorithm that allows backpropagation through any physical system for which a digital model can be trained. As shown above, 1. inputs and parameters are sent into the physical system, which 2. propagate through the system. 3. The outputs of the system are compared to the intended outputs and 4. the gradient on the parameters is calculated by the differentiable digital model. 5. With this gradient, the paramters can be updated (Reprinted from Wright, L.G. & Onodera, T. *et al* [2021]). This repository implements the PAT algorithm and simplifies the training of differentiable digital models. Users only need to supply a class that controls the physical system.
+Physics-aware training (PAT) is a gradient-descent algorithm that allows backpropagation through any physical system for which a digital model can be trained. As shown above, 1. inputs and parameters are sent into the physical system, which 2. propagate through the system. 3. The outputs of the system are compared to the intended outputs and 4. the gradient on the parameters is calculated by the differentiable digital model. 5. With this gradient, the paramters can be updated (Reprinted from Wright, L.G. & Onodera, T. *et al* [2021]). This repository implements the PAT algorithm and simplifies the training of differentiable digital models.
 <br/><br/>
 
 ### Users supply a class that executes an experiment
 ![define-exp](https://user-images.githubusercontent.com/35846424/115942312-9bfc5180-a477-11eb-9491-a4fe53fc8fa8.png)
 <br/><br/>
 
-Users need to supply a class that controls the physical system. When calling an instance of the class, the supplied code needs to initiate a physical computation with the given inputs and parameters.
+Users need to supply a class that controls the physical system. When calling an instance of the class, the supplied code needs to initiate a physical computation with the given inputs and parameters and measure the outputs of the physical system.
 
 ### The ExpModule class learns a differentiable model of the experiment
 ![instantiate-ExpModule](https://user-images.githubusercontent.com/35846424/115963590-f9cb8080-a4ed-11eb-8bc8-92777de2be24.png)
 <br/><br/>
 
-The training of a differentiable digital model is facilitated by the ExpModule class. Users need to characterize the input and output dimensions of the physical system, just like, for example, a `torch.nn.Linear(d_in, d_out)`. Additionally, the trainable parameters and their experimentally allowable ranges need to be specified. Then the code can train a differentiable digital model for the physical system.
+The training of a differentiable digital model is facilitated by the `ExpModule` class. Users need to characterize the input and output dimensions of the physical system, just like, for example, a `torch.nn.Linear(d_in, d_out)`. Additionally, the trainable parameters and their experimentally allowable ranges need to be specified. Then the code can train a differentiable digital model for the physical system.
 
 ### A pnn.Module defines the physical neural network
 ![define-pnn](https://user-images.githubusercontent.com/35846424/115942317-a28ac900-a477-11eb-9f7c-e639c8557689.png)
 <br/><br/>
 
-Finally, users need to specify how the physical system is used in a multi-layer Physical Neural Network. These can be trained with a training loop just like any other PyTorch model
+Finally, users need to specify how the physical system is used in a multi-layer Physical Neural Network. PNNs can thenbe trained with a training loop just like any other PyTorch model.
 
 # Demonstrations
 
 - [Coupled Pendula on a 2-dimensional dataset](https://github.com/mcmahon-lab/Physics-Aware-Training/blob/main/examples/Example%201-Coupled%20Pendula%20on%202D%20dataset.ipynb)
-  An illustrative example of coupled pendula classifying simple distributions in a 2-dimensional plane, akin to https://playground.tensorflow.org/. The physical system is controlled by partitioning controllable initial conditions into inputs and parameters, to achieve >90% classification accuracy on multiple datasets.'
+  An illustrative example of coupled pendula classifying simple distributions in a 2-dimensional plane, akin to https://playground.tensorflow.org/. The physical system is controlled by partitioning controllable initial conditions (angles of the pendula) into inputs and parameters, to achieve >90% classification accuracy on multiple datasets.
  
 https://user-images.githubusercontent.com/35846424/115789949-ef956f00-a393-11eb-8814-cf4cb8ada98d.mp4
  
 - [Coupled Pendula on vowel dataset](https://github.com/mcmahon-lab/Physics-Aware-Training/blob/main/examples/Example%202-Coupled%20Pendula%20on%20vowel%20dataset.ipynb) 
-  This example shows the coupled pendula chain solving a slightly more complex task, that of [vowel classification](https://homepages.wmich.edu/~hillenbr/voweldata.html). Here, the       physical system is controlled by changing in-place parameters like the coupling constants and natural frequencies of the pendula to achieve 95% classification accuracy on a vowel classification datasets.
+  This example shows the coupled pendula chain solving a more complex task, that of [vowel classification](https://homepages.wmich.edu/~hillenbr/voweldata.html). Here, the       physical system is controlled by changing in-place parameters like the coupling constants and natural frequencies of the pendula to achieve 95% classification accuracy on the Hillenbrand vowel classification dataset.
   
  ![download](https://user-images.githubusercontent.com/35846424/115791885-3c2e7980-a397-11eb-9a95-ef1804034fe9.png) 
  
 ## How you can make it work with your experiments
 
-The goal of this repository is to set up Physical Neural Networks whose forward pass can consiste of any physical system:
-
-```python
-class PhysicalNeuralNetwork(pnn.Module):
-    def __init__(self):
-        super(pnn.Module, self).__init__()
-        
-        self.experiment = ExpModule(**experimentargs)     
-
-    def forward(self, x):
-       
-        x = self.experiment(x)
-
-        return output
-```
-
-In order to use a physical system in a fashion shown above, a few steps are required.
+In order to use a physical system in as a neural network building block, these steps are required.
 The first requirement is an `Experiment` class which processes batched input samples.
 Specifically, the class will receive a list of inputs (in a `torch.tensor`) and needs to return a batch of processed outputs:
 
@@ -80,11 +64,11 @@ Specifically, the class will receive a list of inputs (in a `torch.tensor`) and 
 | (input 3, experimental parameters 3, hyperparameters)  | --> |  output 3 |
 |  ...                                             |     |  ...      |
 
- Above is an abstract represenation of the mapping the experiment class needs to provide. 
+ Above is an abstract representation of the mapping the experiment class needs to provide. 
  Varying inputs and experimental parameters need to be mapped to corresponding outputs. 
  The hyperparameters characterizing the experiment will be constant from run to run.
 
-The following code are slightly adapted excerpts from the [exp.py](https://github.com/mcmahon-lab/Physics-Aware-Training/blob/master/examples/exp.py) file.
+The following snippets are slightly adapted excerpts from the [exp.py](https://github.com/mcmahon-lab/Physics-Aware-Training/blob/master/examples/exp.py) file, showcasing a simulation of an example experiment class.
 
 To set up the experiment, define a custom class for it:
 
