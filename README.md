@@ -1,7 +1,7 @@
 
 ![g5382](https://user-images.githubusercontent.com/35846424/116468174-894e9780-a83e-11eb-97a8-88063e1653c0.png)
 <br/><br/>
-*Physics-Aware Training* (PAT) is a method to train real physical systems with backpropagation. It was introduced in Wright, Logan G. & Onodera, Tatsuhiro *et al* (2021)<sup>[1](#how-to-cite-this-code)</sup> to train *Physical Neural Networks* (PNNs) - neural networks whose building blocks are physical systems.
+*Physics-Aware Training* (PAT) is a method to train real physical systems with backpropagation. It was introduced in Wright, Logan G. & Onodera, Tatsuhiro *et al.* (2021)<sup>[1](#how-to-cite-this-code)</sup> to train *Physical Neural Networks* (PNNs) - neural networks whose building blocks are physical systems.
 
 This repository is a PyTorch-based implementation of *Physics-Aware Training*. It lets users build *Physical Neural Networks* and automates many of the necessary steps to train them with *Physics-Aware Training*. To use an existing physical system as a building block in a neural network, users have to supply a class that receives batches of input data and processes them in the physical system. After specifying the trainable parameters, the system can be trained with this code. The methodology is demonstrated on an illustrative example of simulated, nonlinear coupled pendula. In our paper, we demonstrated the method on real experiments. 
 
