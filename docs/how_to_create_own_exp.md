@@ -129,7 +129,7 @@ pendulaargs = dict(
 pendula = ExpModule(**pendulaargs)
 ```
 
-Inserting this code into a `pnn.Module`, we can define a Physical Neural Network. For more details, please see the [Coupled Pendula on a 2-dimensional dataset](https://github.com/mcmahon-lab/Physics-Aware-Training/blob/main/examples/Example%201-Coupled%20Pendula%20on%202D%20dataset.ipynb) example.
+Inserting this code into a `pnn.Module`, we can define a Physical Neural Network. The full implementation of the `CoupledPendula` experiment class is located in [examples/exp.py](https://github.com/mcmahon-lab/Physics-Aware-Training/blob/main/examples/exp.py), for more details on how to build a PNN with this experiment, please see the [Coupled Pendula on a 2-dimensional dataset](https://github.com/mcmahon-lab/Physics-Aware-Training/blob/main/examples/Example%201-Coupled%20Pendula%20on%202D%20dataset.ipynb) example.
 
 ```python
 class PendulumNet(pnn.Module):
