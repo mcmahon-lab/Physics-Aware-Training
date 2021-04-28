@@ -182,21 +182,3 @@ class CoupledPendula():
         target = target.repeat(1, tensor.shape[1])
         indices = torch.argmin(np.abs(tensor - target), dim = -1)
         return indices.long()
-
-    
-class Speaker():
-    # Experiment class for speaker like system
-    # put all hyperparameters in __init__
-    def __init__(self, f, **kwargs):
-        self.f = f
-        print(f'initialized speaker with freq {f}')
-        self.func = torch.load(f'dt_models/Speaker_mean_in784_out784_f{f}.p')
-        
-    def __call__(self, x):
-        # simulate a non-differentiable physical forward pass
-        # put all differentiable trainable parameters __call__
-        if type(x) == torch.Tensor:
-            x = x.detach().float()
-        x = self.func(x)
-        return x.to('cuda:0')
-        # return run_exp(x)
