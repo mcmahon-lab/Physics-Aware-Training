@@ -1,0 +1,5 @@
+# Ignore pycache and ipynb checkpoints
+examples/__pycache__
+examples/.ipynb_checkpoints
+physics_aware_training/__pycache__
+.ipynb_checkpoints
