@@ -7,7 +7,7 @@ This repository is a PyTorch-based implementation of *Physics-Aware Training*. I
 
 This repository also gives users access to documented reference code to implement or modify PAT.
 
-# How to get started
+# Getting started
 
 - To learn about *Physical Neural Networks*, *Physics-Aware Training*, and the scope of this repository, have a look at the [Introduction](https://github.com/mcmahon-lab/Physics-Aware-Training/tree/main/docs/introduction.md).
 - To see pedagogical examples with simulations of real experiments, head over to the [Demonstrations](https://github.com/mcmahon-lab/Physics-Aware-Training/tree/main/examples/README.md).
