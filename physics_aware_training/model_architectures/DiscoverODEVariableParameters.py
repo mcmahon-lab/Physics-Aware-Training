@@ -9,8 +9,6 @@ import torch.nn as nn
 import physics_aware_training.digital_twin_utils 
 import physics_aware_training.params_utils
 from torchdiffeq import odeint
-import ipdb
-
 
 
 class DiscoverODEVariableParameters(nn.Module):
