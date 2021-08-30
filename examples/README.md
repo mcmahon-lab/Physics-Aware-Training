@@ -1,4 +1,4 @@
-# Demonstrations
+# Detailed Demonstrations
 
 - [Coupled Pendula on a 2-dimensional dataset](https://github.com/mcmahon-lab/Physics-Aware-Training/blob/main/examples/Example%201-Coupled%20Pendula%20on%202D%20dataset.ipynb)
   An illustrative example of coupled pendula classifying simple distributions in a 2-dimensional plane, akin to https://playground.tensorflow.org/. The physical system is controlled by partitioning controllable initial conditions (angles of the pendula) into inputs and parameters, to achieve >90% classification accuracy on multiple datasets.
@@ -9,8 +9,5 @@ https://user-images.githubusercontent.com/35846424/115789949-ef956f00-a393-11eb-
   This example shows the coupled pendula chain solving a more complex task, that of [vowel classification](https://homepages.wmich.edu/~hillenbr/voweldata.html). Here, the       physical system is controlled by changing in-place parameters like the coupling constants and natural frequencies of the pendula to achieve 95% classification accuracy on the Hillenbrand vowel classification dataset.
   
  ![download](https://user-images.githubusercontent.com/35846424/115791885-3c2e7980-a397-11eb-9a95-ef1804034fe9.png) 
-
-- [Coupled Nonlinear Oscillators on Fashion MNIST](https://github.com/mcmahon-lab/Physics-Aware-Training/blob/main/examples/Example%203%20-%20Coupled%20Nonlinear%20Oscillators%20on%20Fashion%20MNIST.ipynb) 
-In this example, we consider a physical neural network based on coupled nonlinear oscillators to perform the [Fashion MNIST task](https://github.com/zalandoresearch/fashion-mnist)
 
 [Back to the repository](https://github.com/mcmahon-lab/Physics-Aware-Training)

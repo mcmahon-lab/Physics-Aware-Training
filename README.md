@@ -11,10 +11,13 @@ This repository is a PyTorch-based implementation of *Physics-Aware Training*. I
 
 This repository also gives users access to documented reference code to implement or modify PAT.
 
-# Getting started
+# Self-contained Jupyter notebook example
+- If you want to get started playing around with a simple simulated PNN, you can start with a self-contained example of a coupled nonlinear oscillator PNN that performs the fashion MNIST task [here](https://github.com/mcmahon-lab/Physics-Aware-Training/blob/main/examples/Self-contained%20Example%20-%20Coupled%20Nonlinear%20Oscillators%20on%20Fashion%20MNIST.ipynb).
+
+# If you are interested in more advanced application development:
 
 - To learn about *Physical Neural Networks*, *Physics-Aware Training*, and the scope of this repository, have a look at the [Introduction](https://github.com/mcmahon-lab/Physics-Aware-Training/tree/main/docs/introduction.md).
-- To see pedagogical examples with simulations of real experiments, head over to the [Demonstrations](https://github.com/mcmahon-lab/Physics-Aware-Training/tree/main/examples/README.md).
+- To see pedagogical examples with simulations of real experiments, head over to the [Detailed Demonstrations](https://github.com/mcmahon-lab/Physics-Aware-Training/tree/main/examples/README.md).
 - To apply PAT to new experiments, see [How to make it work with your experiments](https://github.com/mcmahon-lab/Physics-Aware-Training/tree/main/docs/how_to_create_own_exp.md).
 - To see the source code of `physics_aware_training`, see the package in the [physics_aware_training](https://github.com/mcmahon-lab/Physics-Aware-Training/tree/main/physics_aware_training) folder.
 
