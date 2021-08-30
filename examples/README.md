@@ -10,6 +10,7 @@ https://user-images.githubusercontent.com/35846424/115789949-ef956f00-a393-11eb-
   
  ![download](https://user-images.githubusercontent.com/35846424/115791885-3c2e7980-a397-11eb-9a95-ef1804034fe9.png) 
 
-- [Coupled Nonlinear Oscillators on Fashion MNIST]() 
+- [Coupled Nonlinear Oscillators on Fashion MNIST](https://github.com/mcmahon-lab/Physics-Aware-Training/blob/main/examples/Example%203%20-%20Coupled%20Nonlinear%20Oscillators%20on%20Fashion%20MNIST.ipynb) 
 In this example, we consider a physical neural network based on coupled nonlinear oscillators to perform the [Fashion MNIST task](https://github.com/zalandoresearch/fashion-mnist)
+
 [Back to the repository](https://github.com/mcmahon-lab/Physics-Aware-Training)
