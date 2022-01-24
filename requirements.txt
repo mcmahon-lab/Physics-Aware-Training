@@ -7,12 +7,11 @@ numpy==1.19.2
 # for plotting in Example 1 and 2:
 matplotlib==3.3.2
 
-# for the simulation of the chain of coupled pendula in Example 1 and 2:
-scipy==1.5.0
-torchdiffeq==0.2.1
-
 # for plotting the confusion matrix in Example 2:
 skearn==0.23.1
 
-# for neural architecture search:
-optuna==2.2.0
+# for the Fashion MNIST example
+einops==0.3.0
+
+# for training the PNNs
+pytorch-lightning==0.9.0
