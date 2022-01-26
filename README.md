@@ -13,7 +13,7 @@ In this repository, we use examples based on simulated nonlinear coupled oscilla
 
 If you use *Physics-Aware Training* in your research, please consider citing the following paper:
 
->Logan G. Wright, Tatsuhiro Onodera, Martin M. Stein, Tianyu Wang, Darren T. Schachter, Zoey Hu, and Peter L. McMahon (2021). Deep physical neural networks enabled by a backpropagation algorithm for arbitrary physical systems. https://arxiv.org/abs/2104.13386
+> Wright, L.G., Onodera, T., Stein, M.M. et al. Deep physical neural networks trained with backpropagation. _Nature_ **601**, 549–555 (2022). https://doi.org/10.1038/s41586-021-04223-6
 
 # License
 
