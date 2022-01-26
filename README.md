@@ -1,6 +1,6 @@
 ![g5382](https://user-images.githubusercontent.com/35846424/116468174-894e9780-a83e-11eb-97a8-88063e1653c0.png)
 <br/><br/>
-*Physics-Aware Training* (PAT) is a method to train real physical systems with backpropagation. It was introduced in Wright, Logan G. & Onodera, Tatsuhiro *et al.* (2021)<sup>[1](#how-to-cite-this-code)</sup> to train *Physical Neural Networks* (PNNs) - neural networks whose building blocks are physical systems.
+*Physics-Aware Training* (PAT) is a method to train real physical systems with backpropagation. It was introduced in Wright, Logan G. & Onodera, Tatsuhiro *et al.* (2022)<sup>[1](#how-to-cite-this-code)</sup> to train *Physical Neural Networks* (PNNs) - neural networks whose building blocks are physical systems.
 
 In this repository, we use examples based on simulated nonlinear coupled oscillators, to show how PNNs can be constructed and trained using PAT in PyTorch. Instead of a conventional python package, most of the code in this repository resides within self-contained Jupyter notebook examples. We have deliberately taken this approach, in the hopes that it will allow users to more easily understand and adapt this code for their own use. In our paper, we have taken essentially the same approach and demonstrated the methodology on real experiments.
 
