@@ -14,4 +14,4 @@ Physics-aware training (PAT) is a gradient-descent algorithm that allows backpro
 For details on PAT, please refer to the Supplementary Section 1 of our paper. It lays out the intuition for why PAT works and explains its mathematical formulation: https://arxiv.org/pdf/2104.13386.pdf#page=11
 <br/><br/>
 
-[Back to the repository](https://github.com/mcmahon-lab/physics-aware-training_trial)
+[Back to the repository](https://github.com/mcmahon-lab/Physics-Aware-Training)

@@ -6,8 +6,8 @@ In this repository, we use examples based on simulated nonlinear coupled oscilla
 
 # Getting started
 
-- To learn about *Physical Neural Networks*, *Physics-Aware Training*, and the scope of this repository, have a look at the [Introduction](https://github.com/mcmahon-lab/physics-aware-training_trial/blob/master/docs/introduction.md).
-- To see the examples that show how PNNs can be constructed and trained using PAT, see [Examples](https://github.com/mcmahon-lab/physics-aware-training_trial/blob/master/docs/examples.md).
+- To learn about *Physical Neural Networks*, *Physics-Aware Training*, and the scope of this repository, have a look at the [Introduction](https://github.com/mcmahon-lab/Physics-Aware-Training/blob/main/docs/introduction.md).
+- To see the examples that show how PNNs can be constructed and trained using PAT, see [Examples](https://github.com/mcmahon-lab/Physics-Aware-Training/blob/main/docs/examples.md).
 
 # How to cite this code
 
