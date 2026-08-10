@@ -269,5 +269,3 @@ from 2020, and neither imports on anything current.
   deploys it on the experiment. Precomputed, with `run_counterfactual = True` to
   reproduce. A `world()` context manager swaps the globals `PNN.forward` reads, so
   no forward-pass logic is duplicated.
-
-Untracked: this file.
