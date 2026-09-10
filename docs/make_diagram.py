@@ -90,7 +90,7 @@ def cross(ax, x, y, s=2.6, lw=3.4):
 
 def chain(ax, y, h, layer2):
     lab, ec, fc, lw, ls = layer2
-    cells = [(8, 14, "batch $x$", "#999999", GREY_F, 1.2, "-", 10),
+    cells = [(8, 14, "batch $i_1$", "#999999", GREY_F, 1.2, "-", 10),
              (26, 18, "Layer 1", DIGI, DIGI_F, 1.4, "-", 11),
              (48, 18, lab, ec, fc, lw, ls, 11),
              (70, 18, "Layer N", DIGI, DIGI_F, 1.4, "-", 11),
@@ -102,129 +102,7 @@ def chain(ax, y, h, layer2):
     for x1, x2 in ((22, 26), (44, 48), (66, 70), (88, 92), (106, 110)):
         arrow(ax, x1, y + h / 2, x2, y + h / 2, ms=12)
     txt(ax, 68, y + h + 1.8, "⋯", 13, MUTE)      # the stack continues
-
-
-# ═══════════════════════ 1 · the anchor ═══════════════════════
-def p_summary(pdf):
-    fig = plt.figure(figsize=(13.5, 9.5)); ax = canvas(fig)
-    head(ax, None, "Physics-Aware Training — the whole thing on one page",
-         "come back here whenever a detail page stops making sense")
-
-    txt(ax, 6, 78.5, "THE IDEA", 11, MUTE, ha="left", w="bold")
-    box(ax, 24, 68, 42, 12, "#999999", GREY_F, lw=1.4)
-    txt(ax, 45, 76.4, "an ordinary layer", 11, MUTE, w="bold")
-    txt(ax, 45, 72, "$h = ReLU(Wx + b)$\narithmetic on a chip", 10.5, INK)
-    txt(ax, 71, 74, "→", 20, INK)
-    box(ax, 77, 68, 48, 12, PHYS, PHYS_F, lw=2.2)
-    txt(ax, 101, 76.4, "a physical layer", 11, PHYS, w="bold")
-    txt(ax, 101, 72, "pull the pendulums back, let go,\nmeasure where they end up", 10.5, INK)
-    txt(ax, 67.5, 65.4, "same job — mix the inputs, bend them, produce outputs.  The weights are the spring stiffnesses.",
-        10.5, MUTE)
-
-    rule(ax, 62.5)
-
-    txt(ax, 6, 58.5, "THE PROBLEM", 11, MUTE, ha="left", w="bold")
-    box(ax, 24, 50, 30, 8, PHYS, PHYS_F, lw=1.8)
-    txt(ax, 39, 54, "the plate", 11.5, PHYS, w="bold")
-    arrow(ax, 55, 56.4, 96, 56.4, lw=1.6)
-    txt(ax, 75.5, 58.8, "forward — fine", 8.5, MUTE, st="italic")
-    cross(ax, 62, 51.4)
-    arrow(ax, 96, 51.4, 68, 51.4, c="#555555", lw=1.6, ls=(0, (4, 2)))
-    txt(ax, 82, 49, "backward — blocked", 8.5, BAD, st="italic")
-    box(ax, 97, 50, 28, 8, DIGI, DIGI_F, lw=1.5)
-    txt(ax, 111, 54, "loss", 11.5, INK)
-    txt(ax, 67.5, 46.4, "backprop needs the derivative of every layer. A lump of metal has no code, so it has no derivative.",
-        10.5, INK)
-    txt(ax, 67.5, 43.4, "and you cannot measure your way out: a measurement is a value, not a slope. one poke per knob means millions of runs.",
-        10.5, MUTE)
-
-    rule(ax, 40.5)
-
-    txt(ax, 6, 36.5, "THE FIX", 11, MUTE, ha="left", w="bold")
-    box(ax, 24, 27, 45, 8, PHYS, PHYS_F, lw=2.2)
-    txt(ax, 46.5, 31, "FORWARD  →  the real plate", 12, PHYS, w="bold")
-    box(ax, 76, 27, 49, 8, DIGI, DIGI_F, lw=2.2)
-    txt(ax, 100.5, 31, "BACKWARD  →  a simulation", 12, DIGI, w="bold")
-    txt(ax, 46.5, 24.2, "run it, measure it", 10, INK)
-    txt(ax, 100.5, 24.2, "differentiated at the plate's measured values", 10, INK)
-    txt(ax, 67.5, 19.4, "the simulation is wrong, so the gradient is approximate — but reality re-anchors the state at every layer, so the error never compounds.",
-        10.5, INK)
-
-    rule(ax, 16.5)
-
-    txt(ax, 6, 13.6, "THE RESULT", 11, MUTE, ha="left", w="bold")
-    txt(ax, 6, 11, "Fashion-MNIST", 9, MUTE, ha="left", st="italic")
-    txt(ax, 76, 13.8, "tested on the DEVICE", 10, PHYS, w="bold")
-    txt(ax, 76, 11.4, "what you actually get", 8.5, MUTE)
-    txt(ax, 108, 13.8, "tested on the SIMULATOR", 10, DIGI, w="bold")
-    txt(ax, 108, 11.4, "what you would report", 8.5, MUTE)
-    for y, lab, lc, a, ac, b, bc in ((7.4, "PAT", PARAM, "87.80%", PARAM, "86.55%", INK),
-                                     (3.6, "trained on the simulation only", BAD, "79.25%", BAD, "87.55%", WARN)):
-        txt(ax, 62, y, lab, 11, lc, ha="right", w="bold")
-        txt(ax, 76, y, a, 16, ac, w="bold")
-        txt(ax, 108, y, b, 16, bc, w="bold")
-    txt(ax, 67.5, 0.8, "the left column is reality. The right column is what your simulator would tell you — and it says the WRONG method won.",
-        11, BAD, w="bold")
-
-    pdf.savefig(fig); plt.close(fig)
-
-
-# ═══════════════════════ 2 · the cast ═══════════════════════
-def p_cast(pdf):
-    fig = plt.figure(figsize=(13.5, 9.5)); ax = canvas(fig)
-    head(ax, None, "The cast",
-         "every name used in this deck, defined once — and the one word that causes all the trouble.")
-
-    txt(ax, 6, 80.5, "TWO MACHINES", 11, MUTE, ha="left", w="bold")
-    machines = [
-        (6, PHYS, PHYS_F, "THE DEVICE", "$f_{exp}$", "hardware — a plate, a crystal, a circuit",
-         ["you can RUN it", "you cannot look inside it", "you cannot differentiate it"]),
-        (70, DIGI, DIGI_F, "THE SIMULATOR", "$f_{model}$", "code, on your computer",
-         ["you can run it AND differentiate it", "it is wrong, by a few percent",
-          "its answers are thrown away — only its slopes are kept"]),
-    ]
-    for x, ec, fc, name, sym, what, bullets in machines:
-        box(ax, x, 59, 59, 19, ec, fc, lw=2.0)
-        txt(ax, x + 4, 74.6, name, 12.5, ec, ha="left", w="bold")
-        txt(ax, x + 26, 74.6, sym, 13, ec, ha="left")
-        txt(ax, x + 4, 71.2, what, 9.5, MUTE, ha="left", st="italic")
-        for k, b in enumerate(bullets):
-            txt(ax, x + 4, 67.4 - k * 3.3, "·   " + b, 10, INK, ha="left")
-
-    rule(ax, 56)
-
-    txt(ax, 6, 52.5, "FIVE KINDS OF NUMBER", 11, MUTE, ha="left", w="bold")
-    for x, name in ((20, "what it is"), (78, "how many numbers"), (103, "where it lives")):
-        txt(ax, x, 48.5, name, 9.5, MUTE, ha="left", w="bold")
-    rows = [("$x$", "the data going INTO a layer", "a vector", "computer  →  device", PHYS),
-            (r"$\theta$", "the knob settings — these are the weights", "millions", "the computer, always", PARAM),
-            (r"$\hat{y}$", "what the device MEASURED coming out", "a vector", "device  →  computer", PHYS),
-            ("$L$", "the loss", "ONE number", "the computer", DIGI),
-            ("$g$", "a gradient — how the loss moves per knob", "one per knob", "the computer", DIGI)]
-    for k, (sym, what, size, lives, c) in enumerate(rows):
-        y = 44 - k * 4.6
-        if k % 2 == 0:
-            box(ax, 8, y - 2.2, 121, 4.4, "#f7f7f7", "#f7f7f7", lw=0.5, z=0)
-        txt(ax, 13, y, sym, 14, c, w="bold")
-        txt(ax, 20, y, what, 10.5, INK, ha="left")
-        txt(ax, 78, y, size, 10.5, MUTE, ha="left")
-        txt(ax, 103, y, lives, 10.5, c, ha="left")
-
-    rule(ax, 19)
-
-    txt(ax, 6, 15.6, "The word that causes all the trouble", 12.5, BAD, ha="left", w="bold")
-    box(ax, 6, 1, 123, 12, BAD, "#fdecec", lw=1.6)
-    txt(ax, 67.5, 10.4, "In machine learning, \"the model\" means the network you are training.  The PAT paper calls $f_{model}$ \"the differentiable digital model\".",
-        11, INK)
-    txt(ax, 67.5, 7.4, "Those are two completely different things. This deck never says \"the model\" on its own:", 11, INK)
-    txt(ax, 24, 3.6, "the network", 11, INK, ha="right", w="bold")
-    txt(ax, 26, 3.6, "= what you are training, and it has physical layers", 10.5, MUTE, ha="left")
-    txt(ax, 80, 3.6, "the simulator", 11, DIGI, ha="right", w="bold")
-    txt(ax, 82, 3.6, "= $f_{model}$", 10.5, MUTE, ha="left")
-    txt(ax, 106, 3.6, "the device", 11, PHYS, ha="right", w="bold")
-    txt(ax, 108, 3.6, "= $f_{exp}$", 10.5, MUTE, ha="left")
-
-    pdf.savefig(fig); plt.close(fig)
+    txt(ax, 10, y + h + 1.8, "forward  →", 9.5, MUTE, ha="left", st="italic")
 
 
 # ═══════════════════════ 3 · the loop, and the break ═══════════════════════
@@ -248,7 +126,7 @@ def p_loop(pdf):
     arrow(ax, 122, 34.5, 70, 34.5, c="#555555", lw=1.6, ls=(0, (4, 2)))
     cross(ax, 64, 34.5)
     txt(ax, 57, 34.5, "the backward pass stops here", 11, BAD, ha="right", w="bold")
-    txt(ax, 67.5, 29.4, "one layer = let 0.5 seconds pass.  On the plate that IS half a second of physics; simulating it costs 20 matrix multiplies.",
+    txt(ax, 67.5, 29.4, "as a layer:  the input is what you SET on it,  the weights are its knobs,  the output is what you MEASURE — its natural nonlinearity plays the role of ReLU",
         10.5, INK)
 
     rule(ax, 26)
@@ -269,461 +147,531 @@ def p_loop(pdf):
                            "so this layer cannot be trained"]):
         txt(ax, 74, 16.6 - i * 3.4, "✗   " + t, 10, INK, ha="left")
 
-    txt(ax, 67.5, 1.6, "That single broken arrow is the entire problem. Everything that follows is about getting a gradient past it.",
+    txt(ax, 67.5, 1.6, "That single broken arrow is the entire problem.  Four ways to attack it — A, B, C, D — then three experiments.",
         12, INK, w="bold")
 
     pdf.savefig(fig); plt.close(fig)
 
 
-# ═══════════════════════ 3 · value vs slope ═══════════════════════
-def p_gradient(pdf):
+# ═══════════════════════ 2 · the answer ═══════════════════════
+def p_optC(pdf):
     fig = plt.figure(figsize=(13.5, 9.5)); ax = canvas(fig)
-    head(ax, 2, "A measurement is not a gradient",
-         "\"but we ran the real plate and measured the output — why isn't that enough?\"")
+    head(ax, 4, "The answer — PAT, drawn on the same picture",
+         "forward runs the REAL plate. When the gradient reaches the plate on the way back, it detours through a simulator.")
 
-    box(ax, 6, 62, 59, 18, "#999999", GREY_F, lw=1.4)
-    txt(ax, 35.5, 76.4, "what the device gives you", 12.5, MUTE, w="bold")
-    txt(ax, 35.5, 71.4, "a VALUE", 15, INK, w="bold")
-    txt(ax, 35.5, 66.4, "\"with these knobs and this input,\nthis came out\"   —   one point", 10.5, INK)
+    chain(ax, 66.5, 10.5, ("the real plate\nthe physics", PHYS, PHYS_F, 2.4, "-"))
 
-    box(ax, 70, 62, 59, 18, DIGI, DIGI_F, lw=1.8)
-    txt(ax, 99.5, 76.4, "what training needs", 12.5, DIGI, w="bold")
-    txt(ax, 99.5, 71.4, "a SLOPE", 15, INK, w="bold")
-    txt(ax, 99.5, 66.4, "\"if I nudged knob #4,192 a little,\nhow would the loss change?\"", 10.5, INK)
+    arrow(ax, 50, 66, 50, 56.8, c=PHYS, lw=2.0)
+    txt(ax, 48, 62.6, "its input $i$, saved", 8.5, PHYS, ha="right", st="italic")
+    txt(ax, 129, 78.8, "the dataset's label enters here ↓", 8.5, DIGI, ha="right", st="italic")
 
-    txt(ax, 67.5, 58.4, "you cannot read a slope off a single point — a rate of change needs at least two measurements",
-        12, INK, w="bold")
-    txt(ax, 67.5, 55.2, "the same is true of your transformer: knowing the logits tells you nothing about $\\partial loss/\\partial W$ until you run backward",
-        10.5, MUTE)
+    ax.plot([122, 82], [60, 60], color="#555555", lw=1.6, ls=(0, (4, 2)), zorder=3)
+    ax.plot([82, 82], [60, 52], color="#555555", lw=1.6, ls=(0, (4, 2)), zorder=3)
+    arrow(ax, 82, 52, 75.5, 52, c=DIGI, lw=2.0)
+    box(ax, 44, 47.5, 31, 9, DIGI, DIGI_F, lw=2.2)
+    txt(ax, 59.5, 54.2, "a SIMULATOR", 11, DIGI, w="bold")
+    txt(ax, 59.5, 50.6, "a digital stand-in that behaves like the plate — often\nliterally a small neural net, fitted beforehand (Step 3)", 8, INK)
+    arrow(ax, 43.5, 52, 37, 52, c=DIGI, lw=2.0)
+    ax.plot([37, 37], [52, 60], color="#555555", lw=1.6, ls=(0, (4, 2)), zorder=3)
+    arrow(ax, 37, 60, 12, 60, c="#555555", lw=1.6, ls=(0, (4, 2)))
+    txt(ax, 101, 62.4, "backward — normal, until the plate", 8.5, MUTE, st="italic")
+    txt(ax, 24, 57.4, "…and on to Layer 1, which receives an ordinary-looking\nincoming gradient — it cannot tell there was a detour", 7.5, MUTE)
 
-    rule(ax, 51.5)
+    txt(ax, 67.5, 45.6, "NOT part of the network: built once, frozen, output discarded — asked only for its slope, AT those saved inputs", 9.5, DIGI, w="bold")
+    txt(ax, 67.5, 42.8, "“simulator” names how it is BUILT — able to predict the plate, which is what makes its slopes trustworthy. In PAT it never simulates; the code just calls it $f_{backward}$.",
+        8.5, MUTE, st="italic")
 
-    txt(ax, 6, 47.5, "You could get the slopes by measurement alone…", 13, INK, ha="left", w="bold")
-    txt(ax, 10, 43.4, "measure the loss   →   nudge one knob   →   run the plate again   →   the difference IS that knob's derivative, exactly",
-        11, INK, ha="left")
-    txt(ax, 10, 39.6, "then repeat for the next knob.  One hardware run per parameter, per gradient step — millions of runs. Honest, and hopeless at scale.",
-        11, BAD, ha="left", w="bold")
+    rule(ax, 41)
 
-    txt(ax, 6, 34, "…so why is backprop cheap?  Because it knows the STRUCTURE.", 13, INK, ha="left", w="bold")
-    txt(ax, 10, 29.9, "it knows every operation that produced the output, so it works out every slope analytically, in a single pass.",
-        11, INK, ha="left")
-    txt(ax, 10, 26.1, "measurement knows no structure. It sees a black box, so it must discover each slope separately, one poke at a time.",
-        11, INK, ha="left")
+    txt(ax, 27, 37.2, "forward", 11, PHYS, ha="right", w="bold")
+    txt(ax, 30, 37.2, "happens ON THE DEVICE — physically run, measured. Nothing is imagined.", 10.5, INK, ha="left")
+    txt(ax, 27, 33.4, "backward", 11, DIGI, ha="right", w="bold")
+    txt(ax, 30, 33.4, "happens ON YOUR COMPUTER — the simulator is code; the device sits idle", 10.5, INK, ha="left")
+    txt(ax, 27, 29.6, "update", 11, PARAM, ha="right", w="bold")
+    txt(ax, 30, 29.6, "$optimizer.step()$ on your computer, exactly as always — $\\theta$ never lives in the plate", 10.5, INK, ha="left")
 
-    rule(ax, 22)
+    box(ax, 6, 18.5, 123, 8, PARAM, PARAM_F, lw=1.8)
+    txt(ax, 67.5, 24.2, "✓   the error cannot compound: the forward pass re-anchors every layer to reality.", 11.5, PARAM, w="bold")
+    txt(ax, 67.5, 20.8, "all that survives is the simulator's small per-layer slope error — and that does not snowball with depth.", 10, INK)
 
-    box(ax, 6, 10, 59, 10, PHYS, PHYS_F, lw=1.7)
-    txt(ax, 35.5, 17, "the device", 12, PHYS, w="bold")
-    txt(ax, 35.5, 12.8, "truth  ✓          structure  ✗", 12, INK)
-
-    box(ax, 70, 10, 59, 10, DIGI, DIGI_F, lw=1.7)
-    txt(ax, 99.5, 17, "the simulation", 12, DIGI, w="bold")
-    txt(ax, 99.5, 12.8, "truth  ✗          structure  ✓", 12, INK)
-
-    txt(ax, 67.5, 6.2, "PAT takes from each what it actually has: the device supplies the values, the simulation supplies the slopes.",
-        13, PARAM, w="bold")
-    txt(ax, 67.5, 2.4, "Fog on a hillside: the altimeter says exactly where you are, the map says which way is down. Read the map at the altimeter's position.",
-        10.5, MUTE)
+    txt(ax, 67.5, 13.6, "next: the same thing layer by layer, showing every copy.  Then the last honest alternative, and three experiments.",
+        11, MUTE, st="italic")
+    txt(ax, 6, 9.8, "colour = where a number comes from:", 8.5, MUTE, ha="left", w="bold")
+    txt(ax, 40, 9.8, "measured on the DEVICE", 8.5, PHYS, ha="left", w="bold")
+    txt(ax, 66, 9.8, "computed on the COMPUTER", 8.5, DIGI, ha="left", w="bold")
+    txt(ax, 94, 9.8, "the weights θ", 8.5, PARAM, ha="left", w="bold")
 
     pdf.savefig(fig); plt.close(fig)
 
 
-# ═══════════════════════ 4 · the four ways out ═══════════════════════
-def p_options(pdf):
+# ═══════════════════════ 3 · alternative A ═══════════════════════
+def p_optA(pdf):
     fig = plt.figure(figsize=(13.5, 9.5)); ax = canvas(fig)
-    head(ax, 3, "The four ways out",
-         "two dead ends, one impossible, and one that works.")
+    head(ax, 2, "Alternative A — don't train the physical layer",
+         "freeze the knobs and let the digital layers do all the learning. The simplest idea, and it half-works.")
 
-    for x, name in ((44, "touches hardware\nduring training"), (70, "can the physics\nlayer learn?"),
-                    (95, "cost per\ntraining step"), (117, "result")):
-        txt(ax, x, 81, name, 10, MUTE, w="bold")
+    chain(ax, 66, 10.5, ("the plate\nFROZEN", "#777777", GREY_F, 2.2, "-"))
+    arrow(ax, 122, 61, 70, 61, c="#555555", lw=1.6, ls=(0, (4, 2)))
+    cross(ax, 64, 61)
+    txt(ax, 57, 61, "the gradient still stops at the plate", 10.5, BAD, ha="right", w="bold")
+    txt(ax, 67.5, 56.4, "so every layer BEFORE the plate is stranded too — no gradient can ever reach Layer 1", 10.5, INK)
 
-    rows = [
-        ("A", "freeze it", BAD, "no", "✗   no", "cheap", "wastes the device", MUTE,
-         "leave the knobs where they are; train only the digital parts around the plate"),
-        ("B", "simulate both ways", BAD, "no", "✓   for the wrong device", "cheap", "79.25%", BAD,
-         "train entirely in software, then set the real dials to the finished numbers"),
-        ("C", "PAT", PARAM, "yes, every batch", "✓   yes", "one round trip\nper layer", "87.80%", PARAM,
-         "run the real plate; let the simulator differentiate AT the values it measured"),
-        ("D", "measure it directly", BAD, "yes, millions of times", "✓   yes", "one run per\nparameter", "impossible", MUTE,
-         "nudge a knob, re-run the plate, read off the difference — exact, and unaffordable"),
-    ]
-    for i, (letter, name, c, hw, learn, cost, res, rc, what) in enumerate(rows):
-        y = 70 - i * 13
-        box(ax, 6, y - 6, 123, 12.5, c if c == PARAM else "#dddddd",
-            PARAM_F if c == PARAM else ("#ffffff" if i % 2 else "#f7f7f7"),
-            lw=2.0 if c == PARAM else 1.0)
-        bullet(ax, 11.5, y + 2, letter, c, r=2.8, size=13)
-        txt(ax, 16.5, y + 2, name, 12, c, ha="left", w="bold")
-        txt(ax, 16.5, y - 3, what, 9.5, MUTE, ha="left", st="italic")
-        txt(ax, 44, y + 1, hw, 10, INK)
-        txt(ax, 70, y + 1, learn, 10, INK)
-        txt(ax, 95, y + 1, cost, 10, INK)
-        txt(ax, 117, y + 1, res, 14 if "%" in res else 10.5, rc, w="bold")
+    rule(ax, 52.5)
 
-    rule(ax, 23)
-    txt(ax, 6, 19.4, "Why B loses:  suppose the simulation is 0.5% off.  After n layers the gap is —",
-        12.5, INK, ha="left", w="bold")
+    box(ax, 6, 30, 59, 20, DIGI, "#ffffff", lw=1.5)
+    txt(ax, 35.5, 46.6, "why it half-works", 12, DIGI, w="bold")
+    txt(ax, 10, 42.2, "·   a fixed, random, nonlinear mixing of the data\n     is genuinely useful", 10, INK, ha="left")
+    txt(ax, 10, 36, "·   put the physics FIRST and train only a digital\n     readout after it — this is reservoir computing", 10, INK, ha="left")
 
+    box(ax, 70, 30, 59, 20, PHYS, "#fffaf6", lw=1.5)
+    txt(ax, 99.5, 46.6, "why it is not enough", 12, PHYS, w="bold")
+    txt(ax, 74, 43, "·   the physics never adapts to your task", 10, INK, ha="left")
+    txt(ax, 74, 38.6, "·   all learning is pushed into digital layers —\n     the exact compute the device was built to avoid", 10, INK, ha="left")
+    txt(ax, 74, 33.4, "·   millions of knobs sit at random settings, unused", 10, INK, ha="left")
+
+    box(ax, 6, 17.5, 123, 7.5, BAD, "#fdecec", lw=1.8)
+    txt(ax, 67.5, 21.2, "✗   VERDICT: usable, but it wastes the device — the physical layer is a random mixer, not a trained computer.", 11.5, BAD, w="bold")
+
+    txt(ax, 67.5, 12.6, "the knobs themselves have to learn.  Next: replace the plate with a model of it.", 11, MUTE, st="italic")
+
+    pdf.savefig(fig); plt.close(fig)
+
+
+# ═══════════════════════ 4 · alternative B ═══════════════════════
+def p_optB(pdf):
+    fig = plt.figure(figsize=(13.5, 9.5)); ax = canvas(fig)
+    head(ax, 3, "Alternative B — train against the simulator",
+         "then copy the finished weights onto the plate, once. The plate leaves the loop entirely — everything flows, and that is the trap.")
+
+    chain(ax, 66.5, 10.5, ("the SIMULATOR\nin the plate's slot", DIGI, DIGI_F, 2.4, "-"))
+
+    arrow(ax, 122, 61, 12, 61, c="#555555", lw=1.6, ls=(0, (4, 2)))
+    txt(ax, 67.5, 63.6, "backward — flows perfectly: every box is differentiable. Nothing breaks, training converges…", 9.5, INK)
+    txt(ax, 67.5, 57.8, "…because BOTH passes run the simulator. The real plate is not in the loop at all — when training ends, $\\theta$ is copied onto it, once.", 10, BAD, w="bold")
+
+    txt(ax, 22, 55.9, "during B's training every number is COMPUTED —", 8.5, DIGI, ha="left", st="italic")
+    txt(ax, 72, 55.9, "nothing is MEASURED until training is already over.", 8.5, PHYS, ha="left", st="italic")
+    rule(ax, 54.5)
+
+    txt(ax, 6, 51.2, "the simulator, properly:", 11, DIGI, ha="left", w="bold")
+    txt(ax, 6, 48.4, r"$f_{model}(x,\ \theta)$  —  differentiable torch code that predicts the plate: the physics written out, or a small net FITTED to the device —", 9.5, INK, ha="left")
+    txt(ax, 6, 45.8, r"trained once, beforehand, on thousands of measured $(x,\ \theta) \rightarrow y$ pairs. In that tiny side-training the device's own outputs are the TARGETS.", 9.5, INK, ha="left")
+    txt(ax, 6, 43.2, "the paper's “differentiable digital model”. Either way it is slightly WRONG — constants off, effects unmodelled. Shrinkable, never closable.", 9, PHYS, ha="left", st="italic")
+
+    rule(ax, 42)
+
+    txt(ax, 6, 38.8, "and slightly wrong is fatal at depth — suppose it is off by just 0.5%:", 11, BAD, ha="left", w="bold")
     gaps = [(1, "0.5%", INK), (2, "1.1%", INK), (5, "3.1%", WARN), (10, "8.3%", WARN), (20, "33%", BAD)]
     for i, (n, g, c) in enumerate(gaps):
         x = 18 + i * 21
-        box(ax, x, 8.5, 17, 8, c if c != INK else "#999999",
+        box(ax, x, 28, 17, 8, c if c != INK else "#999999",
             "#fdecec" if c == BAD else ("#fdf6e3" if c == WARN else GREY_F), lw=1.6 if c == BAD else 1.2)
-        txt(ax, x + 8.5, 14.4, f"n = {n}", 9.5, MUTE)
-        txt(ax, x + 8.5, 11, g, 14 if c == BAD else 12, c, w="bold")
+        txt(ax, x + 8.5, 33.8, f"n = {n}", 9.5, MUTE)
+        txt(ax, x + 8.5, 30.4, g, 13 if c == BAD else 11.5, c, w="bold")
         if i < 4:
-            arrow(ax, x + 17.6, 12.5, x + 20.4, 12.5, ms=11)
+            arrow(ax, x + 17.6, 32, x + 20.4, 32, ms=11)
+    txt(ax, 67.5, 24.6, "errors COMPOUND — every layer works on the previous layer's already-wrong answer. The weights land tuned for a machine that does not exist.", 9.5, INK)
 
-    txt(ax, 67.5, 4.6, "errors compound, they do not add — every layer works on the previous layer's already-wrong answer.",
-        11.5, INK)
-    txt(ax, 67.5, 1.4, "and B never warns you: on its own simulator it reports 87.55%, a quarter-point above PAT's real score of 87.80%.   (Fashion-MNIST)",
-        11.5, BAD, w="bold")
+    box(ax, 6, 14.5, 123, 7, BAD, "#fdecec", lw=1.8)
+    txt(ax, 67.5, 18, "✗   VERDICT: fails SILENTLY — from inside the simulator everything looks excellent. The drop only appears on the hardware, after training is done.", 10.5, BAD, w="bold")
 
-    pdf.savefig(fig); plt.close(fig)
-
-
-# ═══════════════════════ 5 · what the simulator is ═══════════════════════
-def p_sim(pdf):
-    fig = plt.figure(figsize=(13.5, 9.5)); ax = canvas(fig)
-    head(ax, 4, "What the simulator is",
-         "a differentiable stand-in for the device. There are two ways to build one, and neither is exotic.")
-
-    box(ax, 12, 68, 111, 13, DIGI, DIGI_F, lw=1.8)
-    txt(ax, 67.5, 77.4, r"$f_{model}(x,\ \theta)$      →      a prediction of what the device will do", 13, INK)
-    txt(ax, 67.5, 73.4, r"same inputs as the real device: the data $x$ AND the knob settings $\theta$", 10.5, MUTE)
-    txt(ax, 67.5, 70.2, r"it must take $\theta$ as an input — otherwise it cannot tell you how turning a knob changes the output",
-        10, PHYS, st="italic")
-
-    rule(ax, 65)
-
-    routes = [
-        (6, "1", "Write the physics",
-         "you model the mechanism",
-         ["write down the equations of motion you\nbelieve govern the device",
-          "plug in constants you measured —\nmasses, stiffnesses, damping",
-          "integrate them numerically, in torch"],
-         r"e.g.   $\ddot{q} = -\sin q + Q\sin q + e$",
-         "your measured constants are off, and the\nequations were an idealisation to begin with"),
-        (70, "2", "Fit a network to measurements",
-         "you imitate the behaviour — no physics written down",
-         ["poke the real device thousands of times,\nsweeping the inputs AND the knob settings",
-          r"record every  $(x,\ \theta) \rightarrow y$  pair it produces",
-          "fit a small MLP to them, by ordinary backprop"],
-         r"the simulator IS a neural network:   $g(x,\ \theta) \approx y$",
-         "a fit is never exact, and it degrades away\nfrom the settings you happened to sample"),
-    ]
-    for x, n, title, doing, bullets, example, wrong in routes:
-        box(ax, x, 29, 59, 33, DIGI, "#ffffff", lw=1.6)
-        bullet(ax, x + 6, 58.6, n, DIGI, r=2.6, size=12)
-        txt(ax, x + 11, 58.6, title, 12.5, DIGI, ha="left", w="bold")
-        txt(ax, x + 29.5, 54.8, doing, 9.5, MUTE, st="italic")
-        for k, b in enumerate(bullets):
-            txt(ax, x + 4, 50.4 - k * 4.6, "·   " + b, 9.5, INK, ha="left")
-        txt(ax, x + 29.5, 37.6, example, 10.5, INK)
-        ax.plot([x + 4, x + 55], [35.2, 35.2], color="#dddddd", lw=1.0, zorder=0)
-        txt(ax, x + 29.5, 32.4, wrong, 9.5, PHYS)
-
-    txt(ax, 67.5, 26, "both are wrong, and you can shrink the gap but never close it", 11, PHYS, w="bold")
-
-    rule(ax, 23)
-
-    txt(ax, 6, 19.6, "What both routes have in common", 12.5, INK, ha="left", w="bold")
-    for k, t in enumerate([
-        "built ONCE, offline, before PAT training starts — not learned during it",
-        "it IS executed — you cannot differentiate a function without running it — but its answer is discarded",
-        "the device produces every number the network actually uses; the simulator produces only slopes",
-        "it never has to be good enough to USE. Only good enough to DIFFERENTIATE."]):
-        txt(ax, 10, 15.6 - k * 3.7, "·   " + t, 11, INK, ha="left")
+    txt(ax, 67.5, 9.8, "PAT — next page — keeps this exact simulator, demoted to one job:  B trusted its OUTPUTS, PAT uses only its SLOPES.", 11, PARAM, w="bold")
 
     pdf.savefig(fig); plt.close(fig)
 
 
-# ═══════════════════════ 6 · PAT ═══════════════════════
-def p_pat(pdf):
+# ═══════════════════════ 5 · alternative D ═══════════════════════
+def p_optD(pdf):
     fig = plt.figure(figsize=(13.5, 9.5)); ax = canvas(fig)
-    head(ax, 5, "PAT: the device forward, the simulator backward",
-         "one substitution. Everything else in the training loop is untouched.")
+    head(ax, 6, "Alternative D — measure the gradient on the device itself",
+         "no simulator, no assumptions. Honest, exact — and seeing why it is unaffordable is what makes PAT click.")
 
-    # ── forward
-    txt(ax, 8, 79.5, "FORWARD", 13, PHYS, ha="left", w="bold")
-    box(ax, 30, 69, 22, 8, "#999999", GREY_F, lw=1.3)
-    txt(ax, 41, 73, "input $x$", 11)
-    arrow(ax, 53, 73, 61, 73, lw=2.0)
-    box(ax, 62, 66, 37, 14, PHYS, PHYS_F, lw=2.4)
-    txt(ax, 80.5, 75.4, "THE REAL PLATE", 12.5, PHYS, w="bold")
-    txt(ax, 80.5, 70.6, "run it, measure it", 10, INK)
-    arrow(ax, 100, 73, 108, 73, lw=2.0)
-    box(ax, 109, 69, 20, 8, "#999999", GREY_F, lw=1.3)
-    txt(ax, 119, 73, r"output $\hat{y}$", 11)
-    txt(ax, 37, 66.8, "this layer's inputs are saved", 9.5, PHYS, ha="left", st="italic")
+    chain(ax, 66.5, 10.5, ("the real plate\nthe physics", PHYS, PHYS_F, 2.4, "-"))
 
-    # ── the loss closes the loop, down the right-hand side
-    arrow(ax, 119, 68.6, 119, 64.4, lw=2.0)
-    box(ax, 101, 56, 28, 8, DIGI, DIGI_F, lw=1.8)
-    txt(ax, 115, 60, r"loss    $L(\hat{y},\ label)$", 11, INK)
-    txt(ax, 99, 61.4, "the true label enters here,\nand only here", 9.5, DIGI, ha="right", st="italic")
-    arrow(ax, 119, 55.6, 119, 51.4, lw=2.0, c=DIGI)
+    arrow(ax, 118, 61, 15, 61, c=BAD, lw=1.8, ls=(0, (4, 2)))
+    txt(ax, 67.5, 63.6, "there is NO backward pass — instead: nudge ONE knob, run the whole forward chain AGAIN, compare the two losses", 9.5, BAD, w="bold")
+    txt(ax, 67.5, 57.8, "the difference between the two losses is that knob's derivative — exact, measured, no model anywhere", 10, INK)
 
-    # ── the layer's INPUTS (not anything from inside the plate) go to the backward pass
-    ax.plot([34, 34], [68.6, 59], color=PHYS, lw=2.2, zorder=3)
-    ax.plot([34, 72], [59, 59], color=PHYS, lw=2.2, zorder=3)
-    arrow(ax, 72, 59, 72, 54.4, c=PHYS, lw=2.2)
-    txt(ax, 43, 62.6, "the same inputs, handed to the backward pass", 9.5, PHYS, ha="left", st="italic")
-    txt(ax, 43, 60.2, "(for a deeper layer, that is the previous layer's measured output)", 9, MUTE, ha="left", st="italic")
+    rule(ax, 54.5)
 
-    # ── backward
-    txt(ax, 8, 48, "BACKWARD", 13, DIGI, ha="left", w="bold")
-    box(ax, 109, 43, 20, 8, "#999999", GREY_F, lw=1.3)
-    txt(ax, 119, 47, r"$\partial L\ /\ \partial \hat{y}$", 11)
-    arrow(ax, 108, 47, 100, 47, lw=2.0, c=DIGI)
-    box(ax, 62, 40, 37, 14, DIGI, DIGI_F, lw=2.4)
-    txt(ax, 80.5, 49.4, "THE SIMULATOR", 12.5, DIGI, w="bold")
-    txt(ax, 80.5, 44.6, "differentiate it,\nat those saved values", 10, INK)
-    arrow(ax, 61, 47, 53, 47, lw=2.0, c=DIGI)
-    box(ax, 30, 43, 22, 8, "#999999", GREY_F, lw=1.3)
-    txt(ax, 41, 47, "gradient", 11)
-    txt(ax, 41, 41, "→ $optimizer.step()$", 9.5, PARAM, st="italic")
+    txt(ax, 6, 51.2, "why it takes two runs per knob:", 11, DIGI, ha="left", w="bold")
+    txt(ax, 6, 47.8, "one run gives a VALUE — “with these knobs, this came out”.  Training needs a SLOPE, per knob — “how would the loss move if knob #4,192 moved?”", 9.5, INK, ha="left")
+    txt(ax, 6, 44.8, "a slope cannot be read off a single point. Each one costs a fresh run of the entire chain:", 9.5, MUTE, ha="left")
 
-    rule(ax, 36)
+    steps = [("run the device", "loss = 0.4131"), ("nudge knob #1 by $\\epsilon$", "every other knob untouched"),
+             ("run it again", "loss = 0.4126"), ("that knob's derivative", "(0.4126 − 0.4131) / $\\epsilon$ — EXACT")]
+    for k, (t, sub) in enumerate(steps):
+        x = 8 + k * 31
+        box(ax, x, 34.5, 27, 7.5, PHYS if k == 3 else "#999999", PHYS_F if k == 3 else GREY_F, lw=1.4)
+        txt(ax, x + 13.5, 39.9, t, 9.5, INK, w="bold")
+        txt(ax, x + 13.5, 36.6, sub, 8.5, MUTE)
+        if k < 3:
+            arrow(ax, x + 27.6, 38.2, x + 30.4, 38.2, ms=11)
+    txt(ax, 67.5, 30.6, "…now repeat, from the top, for knob #2.  And #3.  And every one of the millions — for EVERY training step.", 10.5, BAD, w="bold")
 
-    txt(ax, 6, 33, "The whole method, in about ten lines of PyTorch", 12.5, INK, ha="left", w="bold")
-    code = [("class func(torch.autograd.Function):", INK, ""),
-            ("    def forward(ctx, *args):", INK, ""),
-            ("        ctx.save_for_backward(*args)", PHYS, "save this layer's INPUTS — the real ones"),
-            ("        return f_forward(*args)", PHYS, "the device runs here, with no graph recorded"),
-            ("", INK, ""),
-            ("    def backward(ctx, grad_output):", INK, ""),
-            ("        args = ctx.saved_tensors", DIGI, "the inputs saved on the way through"),
-            ("        torch.set_grad_enabled(True)", DIGI, "grad mode switches on only now"),
-            ("        y = vjp(f_backward, args, v=grad_output)", DIGI, "y[0] = the simulator's guess — discarded"),
-            ("        return y[1]", DIGI, "y[1] = the gradient — the only thing used")]
-    for k, (line, c, note) in enumerate(code):
-        yy = 29.5 - k * 2.5
-        mono(ax, 8, yy, line, 10, c, "bold" if c != INK else "normal")
-        if note:
-            txt(ax, 68, yy, "←   " + note, 9.5, c, ha="left", st="italic")
+    box(ax, 6, 21, 123, 7, BAD, "#fdecec", lw=1.8)
+    txt(ax, 67.5, 25.7, "✗   VERDICT: perfectly honest, completely unaffordable — one hardware run per knob, per step.", 11, BAD, w="bold")
+    txt(ax, 67.5, 22.8, "note the colour: in D even the SLOPE is orange — measured. That is its honesty, and its cost.", 8.5, PHYS, st="italic")
 
-    rule(ax, 5.5)
-    txt(ax, 67.5, 2.4, "the gradient is approximate — it comes from a model that is wrong. It only has to point roughly downhill.",
-        12, INK, w="bold")
+    box(ax, 6, 5, 123, 13.5, PARAM, PARAM_F, lw=1.8)
+    txt(ax, 67.5, 15, "A wasted the device.     B trusted a wrong simulator.     D cannot afford exactness.", 11, INK, w="bold")
+    txt(ax, 67.5, 11.2, "PAT takes D's instinct — trust only real measurements — and B's simulator, demoted to slopes.", 11.5, PARAM, w="bold")
+    txt(ax, 67.5, 7.6, "that is PAT — Step 4.  One refinement question remains (next page), then the experiments.", 10, PARAM)
 
     pdf.savefig(fig); plt.close(fig)
 
 
-# ═══════════════════════ 8 · one batch, with numbers ═══════════════════════
-def p_trace(pdf):
-    """Numbers below are a real torch trace; see the docstring snippet at the end of this file."""
+# ═══════════════════════ 5 · layer by layer ═══════════════════════
+def p_layers(pdf):
     fig = plt.figure(figsize=(13.5, 9.5)); ax = canvas(fig)
-    head(ax, 7, "One batch, with real numbers",
-         "two layers. The device is 5% off from the simulator — that is the only difference between them.")
+    head(ax, 5, "PAT, layer by layer — what lives where, what is copied",
+         "two physical layers, one training step. Every crossing is plain numbers; everything else stays put.")
 
-    box(ax, 6, 74, 123, 8, INK, GREY_F, lw=1.4)
-    txt(ax, 24, 79.4, "the device", 10.5, PHYS, ha="right", w="bold")
-    txt(ax, 27, 79.4, r"$f_{exp}(x, W) = 1.05 \cdot \tanh(Wx)$", 11.5, INK, ha="left")
-    txt(ax, 78, 79.4, "←  the 1.05 is the manufacturing error", 9.5, PHYS, ha="left", st="italic")
-    txt(ax, 24, 76.2, "the simulator", 10.5, DIGI, ha="right", w="bold")
-    txt(ax, 27, 76.2, r"$f_{model}(x, W) = \tanh(Wx)$", 11.5, INK, ha="left")
-    txt(ax, 78, 76.2, "←  it knows nothing about the 1.05", 9.5, DIGI, ha="left", st="italic")
+    ax.plot([84, 84], [27.5, 80], color="#999999", lw=1.8, ls=(0, (5, 3)), zorder=2)
+    txt(ax, 42, 81.4, "YOUR COMPUTER", 11.5, DIGI, w="bold")
+    txt(ax, 108, 81.4, "THE DEVICE", 11.5, PHYS, w="bold")
 
-    # ── forward
-    txt(ax, 6, 70, "FORWARD   ·   every number here was MEASURED on the device", 11.5, PHYS, ha="left", w="bold")
-    cells = [(8, 30, "$x_0$", "[ 0.500, -0.200, 0.800 ]", "the input"),
-             (52, 32, "$x_1$", "[ 0.417, -0.372, 0.325 ]", "measured"),
-             (98, 28, "$x_2$", "[ 0.385, -0.235 ]", "measured — the logits")]
-    for x, w, sym, vec, note in cells:
-        box(ax, x, 59, w, 8, PHYS, PHYS_F, lw=1.6)
-        txt(ax, x + w / 2, 64.6, sym, 12, PHYS, w="bold")
-        txt(ax, x + w / 2, 61.4, vec, 10, INK)
-        txt(ax, x + w / 2, 57, note, 9, MUTE, st="italic")
-    for x1, x2, lab in ((39, 51, "save $(x_0, W_1)$"), (85, 97, "save $(x_1, W_2)$")):
-        arrow(ax, x1, 63, x2, 63, lw=2.0)
-        txt(ax, (x1 + x2) / 2, 65.6, "device", 9, PHYS, w="bold")
-        txt(ax, (x1 + x2) / 2, 60.4, lab, 8.5, PARAM)
+    box(ax, 6, 74.5, 72, 4.8, PARAM, PARAM_F, lw=1.8)
+    txt(ax, 42, 76.9, r"$\theta_1,\ \theta_2$  —  ALL the weights live here, always", 10.5, PARAM, w="bold")
 
-    rule(ax, 54)
+    def layer_row(y, n, xin, th, xout):
+        box(ax, 6, y, 72, 10.5, DIGI, "#ffffff", lw=1.4)
+        txt(ax, 10, y + 8.3, f"LAYER {n} — computer side", 10, DIGI, ha="left", w="bold")
+        txt(ax, 10, y + 5.9, f"have  {xin}  and  {th}      →  send both across", 9, INK, ha="left")
+        txt(ax, 10, y + 3.9, f"save  ({xin}, {th})  for the backward pass", 9, DIGI, ha="left")
+        txt(ax, 10, y + 1.9, f"receive  {xout}  —  the measurement", 9, PHYS, ha="left", w="bold")
+        box(ax, 88, y, 41, 10.5, PHYS, PHYS_F, lw=2.0)
+        txt(ax, 108.5, y + 8.3, f"LAYER {n} — the physics", 10, PHYS, w="bold")
+        txt(ax, 108.5, y + 5.7, f"knobs set from {th},  state set from {xin}\nthe physics runs;  {xout} is measured off", 8.5, PHYS)
+        txt(ax, 108.5, y + 1.6, "stores nothing, learns nothing", 8, MUTE, st="italic")
+        arrow(ax, 78.5, y + 7.6, 87.5, y + 7.6, c=PHYS, lw=2.2)
+        txt(ax, 83, y + 9.2, "COPY →", 7.5, PHYS, w="bold")
+        arrow(ax, 87.5, y + 2.6, 78.5, y + 2.6, c=PHYS, lw=2.2)
+        txt(ax, 83, y + 4.2, "← COPY", 7.5, PHYS, w="bold")
 
-    # ── loss
-    txt(ax, 6, 50.5, "THE LOSS   ·   ordinary, on your computer", 11.5, DIGI, ha="left", w="bold")
-    loss = [(10, 26, "$softmax(x_2)$", "[ 0.650, 0.350 ]"), (40, 18, "the label", "0"),
-            (62, 22, "$L$", "0.4303"), (88, 41, r"$g_2 = \partial L / \partial x_2$", "[ -0.350, 0.350 ]")]
-    for x, w, sym, vec in loss:
-        box(ax, x, 40, w, 7.5, DIGI, DIGI_F, lw=1.4)
-        txt(ax, x + w / 2, 45.4, sym, 10.5, DIGI, w="bold")
-        txt(ax, x + w / 2, 42.2, vec, 10.5, INK)
-    txt(ax, 67.5, 37.6, "one number out, then plain calculus to get $g_2$. No physics, nothing specific to PAT.",
-        9.5, MUTE, st="italic")
+    layer_row(62.5, 1, r"$i_1$", r"$\theta_1$", r"$o_1$")
+    txt(ax, 42, 61.5, r"$i_2 = o_1$  —  layer 2's input IS layer 1's measured output: the JOINT", 8, PARAM, w="bold")
+    layer_row(50, 2, r"$i_2$", r"$\theta_2$", r"$o_2$")
 
-    rule(ax, 35)
+    ax.plot([3.6, 3.6], [50, 73], color=PHYS, lw=2.2, zorder=3)
+    ax.text(1.6, 61.5, "FORWARD", size=10, color=PHYS, ha="center", va="center",
+            weight="bold", rotation=90, zorder=4)
+    ax.plot([3.6, 3.6], [28.5, 48.5], color=DIGI, lw=2.2, zorder=3)
+    ax.text(1.6, 38.5, "BACKWARD", size=10, color=DIGI, ha="center", va="center",
+            weight="bold", rotation=90, zorder=4)
 
-    # ── backward
-    txt(ax, 6, 31.5, "BACKWARD   ·   differentiate the SIMULATOR, at the values the device saw", 11.5, DIGI, ha="left", w="bold")
-    layers = [(19.5, "layer 2", r"differentiate $f_{model}$ at $(x_1, W_2)$, multiply by $g_2$",
-               "[ 0.367, -0.224 ]", r"gradient for $W_2$   and   $g_1$ = [ -0.115, 0.163, -0.257 ]"),
-              (7.5, "layer 1", r"differentiate $f_{model}$ at $(x_0, W_1)$, multiply by $g_1$",
-               "[ 0.397, -0.354, 0.310 ]", r"gradient for $W_1$   →   $optimizer.step()$")]
-    for y, name, does, discarded, out in layers:
-        box(ax, 6, y, 123, 10, DIGI, DIGI_F, lw=1.5)
-        txt(ax, 10, y + 6.4, name, 11, DIGI, ha="left", w="bold")
-        txt(ax, 25, y + 6.4, does, 10.5, INK, ha="left")
-        txt(ax, 25, y + 2.6, "the simulator also produced " + discarded, 9.5, BAD, ha="left")
-        txt(ax, 74, y + 2.6, "←  DISCARDED", 9.5, BAD, ha="left", w="bold")
-        txt(ax, 126, y + 4.5, out, 10.5, PARAM, ha="right", w="bold")
+    box(ax, 6, 44, 72, 4.5, DIGI, DIGI_F, lw=1.4)
+    txt(ax, 42, 46.2, r"loss  =  $cross\_entropy(o_2,\ label)$   —   computer only, nothing crosses", 9.5, INK)
+    txt(ax, 129, 75.8, "forward: the computer does bookkeeping — the DEVICE does the computing", 8.5, PHYS, ha="right", st="italic")
 
-    box(ax, 6, 0.2, 123, 6.2, BAD, "#fdecec", lw=1.8)
-    txt(ax, 67.5, 4.4, "the device measured [ 0.385, -0.235 ].      The simulator guessed [ 0.367, -0.224 ].", 11.5, INK, w="bold")
-    txt(ax, 67.5, 1.8, "These two are NEVER subtracted, compared, or combined. The right-hand one is deleted.", 11.5, BAD, w="bold")
+    box(ax, 6, 28.5, 72, 13.5, DIGI, DIGI_F, lw=1.8)
+    txt(ax, 10, 39.6, "BACKWARD — entirely on the computer", 10, DIGI, ha="left", w="bold")
+    txt(ax, 10, 36.8, r"simulator's slope of layer 2, at saved $(i_2, \theta_2)$   →   grad $\theta_2$, and the wish about $o_1$", 9, INK, ha="left")
+    txt(ax, 10, 34.2, r"simulator's slope of layer 1, at saved $(i_1, \theta_1)$   →   grad $\theta_1$", 9, INK, ha="left")
+    txt(ax, 10, 31.4, r"$optimizer.step()$   →   $\theta_1, \theta_2$ change — here, and only here", 9.5, PARAM, ha="left", w="bold")
+
+    box(ax, 88, 28.5, 41, 13.5, "#999999", GREY_F, lw=1.2)
+    txt(ax, 108.5, 36.4, "the device is IDLE", 10.5, MUTE, w="bold")
+    txt(ax, 108.5, 33, "nothing is sent to it,\nnothing comes back", 9, MUTE)
+
+    txt(ax, 6, 27.1, "colour = where a number comes from:", 8.5, MUTE, ha="left", w="bold")
+    txt(ax, 40, 27.1, "measured on the DEVICE", 8.5, PHYS, ha="left", w="bold")
+    txt(ax, 66, 27.1, "computed on the COMPUTER", 8.5, DIGI, ha="left", w="bold")
+    txt(ax, 94, 27.1, "the weights θ", 8.5, PARAM, ha="left", w="bold")
+    rule(ax, 26)
+
+    txt(ax, 6, 23, "Copied over, per layer, per batch:", 11, INK, ha="left", w="bold")
+    txt(ax, 10, 19.6, r"→   $\theta_l$, written into the dials     +     the layer's input state", 10.5, PHYS, ha="left")
+    txt(ax, 10, 16.4, "←   one measured output vector", 10.5, PHYS, ha="left")
+    txt(ax, 10, 13, "never copied:   the label   ·   the loss   ·   any gradient   ·   the simulator   ·   autograd", 10.5, BAD, ha="left", w="bold")
+    txt(ax, 10, 9.8, r"next batch, the same $\theta$ is written to the dials AGAIN — the device kept nothing, so nothing needs copying back.", 9.5, MUTE, ha="left", st="italic")
+    txt(ax, 10, 6.6, r"why TWO layers? PAT's advantage lives at the joint: layer 2's slope is taken at the MEASURED $o_1$, not the simulator's guess of it.",
+        9, PARAM, ha="left", w="bold")
+    txt(ax, 10, 4.0, "One layer has no joint — and B would do almost as well.", 9, PARAM, ha="left", w="bold")
 
     pdf.savefig(fig); plt.close(fig)
 
 
-# ═══════════════════════ P2.1 · the three notebooks ═══════════════════════
-def p_notebooks(pdf):
+# ═══════════════════════ 7 · case E ═══════════════════════
+def p_optE(pdf):
     fig = plt.figure(figsize=(13.5, 9.5)); ax = canvas(fig)
-    head(ax, 1, "The three notebooks are one argument",
-         "read in file order they look disconnected. Read as 1 → 3 → 2 they are a proof.", PART_TWO)
+    head(ax, 7, "Case E — PAT, but wrap the whole device as ONE block",
+         "the natural refinement question: why per-layer at all? Run the device end to end, measure once, use one big simulator.")
 
-    for x, name in ((36, "asks"), (72, "answers"), (104, "which part of Part One")):
-        txt(ax, x, 81, name, 10, MUTE, w="bold")
+    txt(ax, 6, 80, "FORWARD — real, end to end, measured ONCE at the exit", 10.5, PHYS, ha="left", w="bold")
+    box(ax, 8, 68, 13, 7, "#999999", GREY_F, lw=1.2)
+    txt(ax, 14.5, 71.5, "batch $i_1$", 9.5)
+    arrow(ax, 21.6, 71.5, 23.4, 71.5, ms=11)
+    box(ax, 24, 64.5, 54, 13, PHYS, PHYS_F, lw=2.4)
+    txt(ax, 51, 74.8, "THE WHOLE DEVICE", 11.5, PHYS, w="bold")
+    box(ax, 28, 66.5, 14, 5.5, PHYS, "#ffffff", lw=1.3)
+    txt(ax, 35, 69.2, "layer 1", 9.5, INK)
+    arrow(ax, 42.6, 69.2, 49.4, 69.2, ms=11)
+    box(ax, 50, 66.5, 14, 5.5, PHYS, "#ffffff", lw=1.3)
+    txt(ax, 57, 69.2, "layer 2", 9.5, INK)
+    txt(ax, 51, 65.6, r"$o_1$ exists physically — but is never read", 8, PHYS, st="italic")
+    arrow(ax, 78.6, 71.5, 81.4, 71.5, ms=11)
+    box(ax, 82, 68, 20, 7, "#999999", GREY_F, lw=1.2)
+    txt(ax, 92, 71.5, "$o_2$ — measured", 9.5, PHYS, w="bold")
+    arrow(ax, 102.6, 71.5, 105.4, 71.5, ms=11)
+    box(ax, 106, 68, 23, 7, DIGI, DIGI_F, lw=1.4)
+    txt(ax, 117.5, 71.5, r"loss $(o_2,\ label)$", 9.5)
 
-    rows = [
-        ("Example 1", "MNIST", "#666666",
-         "can physics be a\nneural network?", "yes — 98%",
-         "none of it. This is the CONTROL:\nno gap, and PAT is not used",
-         "forward and backward are the same function, so there is nothing for PAT to fix.\nIt proves the architecture can learn, and deliberately proves nothing about hardware."),
-        ("Example 3", "a toy scalar function", BAD,
-         "so can I train in simulation\nand upload the weights?", "no",
-         "Step 4 — why option B loses",
-         "reality is $2x^{1.1}$, the simulator is $2.01x^{1.1}$: 0.5% off. Apply both 20 times and the gap is 33%.\nThen the same experiment on gradients: 33% for option B, 10.5% for PAT."),
-        ("Example 2", "Fashion-MNIST", PARAM,
-         "then how?", "PAT",
-         "Steps 5 – 7, on a real task",
-         "the full method, plus the counterfactual: a second network trained in simulation only,\nsame seed and same budget, then deployed on the device. 87.80% against 79.25%."),
-    ]
-    for i, (name, task, c, asks, ans, maps, note) in enumerate(rows):
-        y = 57 - i * 22
-        box(ax, 6, y, 123, 21, c, "#ffffff", lw=1.8)
-        txt(ax, 10, y + 16.2, name, 13.5, c, ha="left", w="bold")
-        txt(ax, 10, y + 12.4, task, 9.5, MUTE, ha="left", st="italic")
-        txt(ax, 36, y + 14.6, asks, 10.5, INK)
-        txt(ax, 72, y + 14.6, ans, 13, c, w="bold")
-        txt(ax, 104, y + 14.6, maps, 10, MUTE)
-        ax.plot([10, 126], [y + 8.6, y + 8.6], color="#e0e0e0", lw=1.0, zorder=2)
-        txt(ax, 67.5, y + 5, note, 9.5, INK)
+    ax.plot([117.5, 117.5], [67.5, 53.5], color="#555555", lw=1.5, ls=(0, (4, 2)), zorder=3)
+    arrow(ax, 117.5, 53.5, 90.8, 53.5, c=DIGI, lw=1.8)
+    box(ax, 34, 49, 56, 9, DIGI, DIGI_F, lw=2.2)
+    txt(ax, 62, 55, "ONE SIMULATOR OF THE WHOLE STACK", 10.5, DIGI, w="bold")
+    txt(ax, 62, 51.4, r"slope taken at $(i_1,\ \theta_1,\ \theta_2)$ — the block's edge", 9, INK)
+    arrow(ax, 33.4, 53.5, 24.6, 53.5, c=DIGI, lw=1.8)
+    box(ax, 6, 50, 18, 7, "#999999", GREY_F, lw=1.2)
+    txt(ax, 15, 53.5, r"grads for $\theta_1$, $\theta_2$", 8.5)
 
-    txt(ax, 67.5, 8.5, "Example 1 read alone looks unimpressive. Read as step one of three, it is doing exactly its job.",
-        11.5, INK, w="bold")
-    txt(ax, 67.5, 4.8, "Example 3 is the load-bearing one: one number of slack (2.01 against 2.00) and one knob (depth), so every effect is checkable by hand.",
-        11, MUTE)
+    txt(ax, 67.5, 45.4, r"but inside, its slope must chain ITSELF:   $J_2(\tilde{o}_1) \cdot J_1(i_1)$   —   $\tilde{o}_1$ is its OWN guess. Compounding returns, inside the block.",
+        10, BAD, w="bold")
+
+    rule(ax, 42)
+
+    box(ax, 6, 22.5, 59, 17.5, PARAM, "#ffffff", lw=1.5)
+    txt(ax, 35.5, 36.6, "PROS", 12, PARAM, w="bold")
+    txt(ax, 10, 33.2, "·   the forward pass and the loss are still REAL —", 9.5, INK, ha="left")
+    txt(ax, 10, 30.8, "     B's silent failure cannot happen", 9.5, INK, ha="left")
+    txt(ax, 10, 28, "·   only the final output needs measuring — the ONLY option", 9.5, INK, ha="left")
+    txt(ax, 10, 25.6, "     when intermediates are physically unreachable", 9.5, INK, ha="left")
+
+    box(ax, 70, 22.5, 59, 17.5, BAD, "#ffffff", lw=1.5)
+    txt(ax, 99.5, 36.6, "CONS", 12, BAD, w="bold")
+    txt(ax, 74, 33.2, r"·   a measured $o_1$, if you can get one, goes UNUSED", 9.5, INK, ha="left")
+    txt(ax, 74, 30.4, "·   gradient quality decays toward B's as the block deepens —", 9.5, INK, ha="left")
+    txt(ax, 74, 28, "     the joints inside the block have no anchors", 9.5, INK, ha="left")
+    txt(ax, 74, 25.2, "·   one big simulator is harder to build than several small ones", 9.5, INK, ha="left")
+
+    box(ax, 6, 13.5, 123, 6.5, WARN, "#fdf6e3", lw=1.8)
+    txt(ax, 67.5, 16.7, "△   VERDICT: legitimate — even necessary — when you cannot measure between layers. Wasteful when you can.", 11, WARN, w="bold")
+
+    txt(ax, 67.5, 8.6, "the spectrum:    B (no real anchors)   →   E (anchored at the block's edges)   →   C (anchored at every joint)", 11, INK)
+    txt(ax, 67.5, 4.6, "the rule underneath PAT:  wrap the physics at the finest granularity you can measure.", 12, PARAM, w="bold")
 
     pdf.savefig(fig); plt.close(fig)
 
 
-# ═══════════════════════ 7 · this repo ═══════════════════════
-def p_repo(pdf):
+# ═══════════════════════ 6 · experiment 1 ═══════════════════════
+def p_ex1(pdf):
     fig = plt.figure(figsize=(13.5, 9.5)); ax = canvas(fig)
-    head(ax, 2, "This repo's network",
-         "two physical layers — not a generic stack — and 2.6 million numbers that never leave your computer.", PART_TWO)
+    head(ax, 8, "Experiment 1 — can physics learn?",
+         "MNIST. The control: an oscillator network with NO reality gap — forward and backward are the same function. PAT is not used.", PART_TWO)
 
-    steps = [
-        (8, 64, 36, 12, "#999999", GREY_F, "the input", "a 28 × 28 image"),
-        (48, 64, 36, 12, "#999999", GREY_F, "cut into patches", "16 patches, 7 × 7 = 49 pixels each"),
-        (88, 64, 41, 12, PHYS, PHYS_F, "LAYER 1   ·   physics",
-         "a 100-oscillator network\nthe SAME one runs all 16 patches"),
-        (8, 40, 41, 12, "#999999", GREY_F, "stack them back up",
-         "16 × 100 = 1600, plus 10 \"class\noscillators\" starting at rest = 1610"),
-        (53, 40, 36, 12, PHYS, PHYS_F, "LAYER 2   ·   physics", "one 1610-oscillator network"),
-        (93, 40, 36, 12, DIGI, DIGI_F, "read out",
-         "the final positions of those\n10 class oscillators = the logits"),
-    ]
-    for x, y, w, h, ec, fc, title, body in steps:
-        box(ax, x, y, w, h, ec, fc, lw=2.0 if ec == PHYS else 1.3)
-        txt(ax, x + w / 2, y + h - 3.2, title, 10.5, ec if ec != "#999999" else MUTE, w="bold")
-        txt(ax, x + w / 2, y + h / 2 - 2.4, body, 9.5, INK)
-    for x1, x2, y in ((44.5, 47.5, 70), (84.5, 87.5, 70), (49.5, 52.5, 46), (89.5, 92.5, 46)):
-        arrow(ax, x1, y, x2, y, ms=12)
-    ax.plot([108, 108], [63.5, 58.5], color=INK, lw=1.6, zorder=3)
-    ax.plot([108, 28.5], [58.5, 58.5], color=INK, lw=1.6, zorder=3)
-    arrow(ax, 28.5, 58.5, 28.5, 52.5, ms=13)
-    txt(ax, 67.5, 55.4, "both layers are physics — there is no digital layer in between", 10, PHYS, st="italic")
+    chain(ax, 66.5, 10.5, ("oscillator network\n(no gap, by design)", PARAM, PARAM_F, 2.4, "-"))
 
-    rule(ax, 35)
-    txt(ax, 6, 31.5, "$\\theta$  —  every trainable number in the network", 13, PARAM, ha="left", w="bold")
+    arrow(ax, 122, 61, 12, 61, c="#555555", lw=1.6, ls=(0, (4, 2)))
+    txt(ax, 67.5, 63.6, "backward — flows: in this notebook the simulator IS the device. One function plays both roles.", 9.5, INK)
+    txt(ax, 67.5, 58.8, "so the orange/blue distinction collapses here — measured and computed are the same number, by design", 8.5, MUTE, st="italic")
 
-    tbl = [("$fc\\_small.weight$", "100 × 100", "10,000", "spring stiffness between every pair, layer 1"),
-           ("$fc\\_small.bias$", "100", "100", "the push applied to each oscillator, layer 1"),
-           ("$fc\\_large.weight$", "1610 × 1610", "2,592,100", "spring stiffnesses, layer 2"),
-           ("$fc\\_large.bias$", "1610", "1,610", "the pushes, layer 2"),
-           ("$output\\_fac$", "one number", "1", "a single output scale")]
-    for i, (n, shape, cnt, meaning) in enumerate(tbl):
-        y = 26 - i * 4.0
-        if i % 2 == 0:
-            box(ax, 8, y - 1.9, 121, 3.8, "#f7f7f7", "#f7f7f7", lw=0.5, z=0)
-        txt(ax, 11, y, n, 10.5, INK, ha="left")
-        txt(ax, 45, y, shape, 10.5, MUTE)
-        txt(ax, 68, y, cnt, 10.5, INK, ha="right")
-        txt(ax, 74, y, meaning, 10.5, PHYS, ha="left")
-    txt(ax, 45, 5.6, "TOTAL", 11.5, PARAM, w="bold")
-    txt(ax, 68, 5.6, "2,603,811", 13, PARAM, ha="right", w="bold")
-    txt(ax, 74, 5.6, "ordinary floats on your computer — never inside the plate", 10.5, PARAM, ha="left", w="bold")
-    txt(ax, 67.5, 1.4, "They change in exactly one place, and it is the same place as in any torch model: $optimizer.step()$.",
-        11.5, INK, w="bold")
+    rule(ax, 56.5)
+
+    txt(ax, 6, 53.2, "the physical layer, mapped onto layer vocabulary:", 11, PHYS, ha="left", w="bold")
+    rows = [("input", "pull each pendulum to a starting angle — the 14×14 image, loaded as angles"),
+            ("weights", "the spring stiffness between every pair, plus a steady push per pendulum — the knobs"),
+            ("compute", "let go and wait half a second — everything swings and tugs on everything else"),
+            ("output", "where the 10 designated “class” pendulums ended up — the logits"),
+            ("activation", "sin — nobody chose it, it falls out of gravity")]
+    for k, (a, b) in enumerate(rows):
+        y = 49.4 - k * 3.6
+        txt(ax, 22, y, a, 10.5, PHYS, ha="right", w="bold")
+        txt(ax, 25, y, b, 10.5, INK, ha="left")
+
+    rule(ax, 30)
+
+    box(ax, 6, 21, 123, 7.5, PARAM, PARAM_F, lw=1.8)
+    txt(ax, 67.5, 24.8, "✓   RESULT: 98% on MNIST — with sin, a “terrible” activation.  The only real requirement is: don't be linear.", 11.5, PARAM, w="bold")
+
+    box(ax, 6, 6.5, 123, 12.5, "#999999", GREY_F, lw=1.4)
+    txt(ax, 67.5, 16.2, "what it proves:  the architecture can learn — despite sin, symmetric weights, and “let time pass” as the only operation.", 10.5, INK, w="bold")
+    txt(ax, 67.5, 12.8, "why the no-gap setup is the point:  it is the CONTROL. It clears the architecture as a suspect —", 10, INK)
+    txt(ax, 67.5, 9.6, "so when training fails in Experiments 3 and 2, only the GAP is left to blame. One variable at a time.", 10, MUTE)
 
     pdf.savefig(fig); plt.close(fig)
 
 
-# ═══════════════════════ 7 · the wiring ═══════════════════════
-def p_wiring(pdf):
+# ═══════════════════════ 7 · experiment 3 ═══════════════════════
+def p_ex3(pdf):
     fig = plt.figure(figsize=(13.5, 9.5)); ax = canvas(fig)
-    head(ax, 3, "Which function runs, in which direction",
-         "both layers are physics. The simulator never appears in the forward pass — it is only ever called on the way back.", PART_TWO)
+    head(ax, 9, "Experiment 3 — what a tiny gap does",
+         "B and C, raced on a toy:  reality is  f(x) = 2.00·x¹·¹ ,  the simulator is  2.01·x¹·¹  —  0.5% off, applied 20 times like 20 layers.", PART_TWO)
 
-    txt(ax, 6, 80, "The wiring — two lines, and this is the whole mapping", 12.5, INK, ha="left", w="bold")
-    box(ax, 10, 64, 119, 12, INK, GREY_F, lw=1.4)
-    for i, (name, dev) in enumerate((("f_pat_small", "f_exp_small"), ("f_pat_large", "f_exp_large"))):
-        mono_parts(ax, 14, 72.4 - i * 4.2,
-                   [(f"{name} = make_pat_func(", INK, "normal"), (dev, PHYS, "bold"),
-                    (", ", INK, "normal"), ("f_model", DIGI, "bold"), (")", INK, "normal")], 11)
-    arrow(ax, 44.7, 61.4, 44.7, 65.6, c=PHYS, lw=1.6)
-    txt(ax, 44.7, 59.6, "1st argument  =  the FORWARD pass  =  the device", 10.5, PHYS, w="bold")
-    arrow(ax, 73, 60.8, 55.5, 65.4, c=DIGI, lw=1.6)
-    txt(ax, 75, 59.8, "2nd argument  =  the BACKWARD pass  =  the simulator", 10.5, DIGI, ha="left", w="bold")
+    txt(ax, 6, 79.6, "①  the forward gap — reality and the simulator, drifting apart:", 11.5, INK, ha="left", w="bold")
+    gaps = [(1, "0.5%", INK), (2, "1.1%", INK), (5, "3.1%", WARN), (10, "8.3%", WARN), (20, "33%", BAD)]
+    for i, (n, g, c) in enumerate(gaps):
+        x = 18 + i * 21
+        box(ax, x, 68, 17, 8, c if c != INK else "#999999",
+            "#fdecec" if c == BAD else ("#fdf6e3" if c == WARN else GREY_F), lw=1.6 if c == BAD else 1.2)
+        txt(ax, x + 8.5, 73.8, f"n = {n}", 9.5, MUTE)
+        txt(ax, x + 8.5, 70.4, g, 13 if c == BAD else 11.5, c, w="bold")
+        if i < 4:
+            arrow(ax, x + 17.6, 72, x + 20.4, 72, ms=11)
+    txt(ax, 67.5, 64.6, "0.5% per layer compounds to 33% at n = 20 — every application works on the previous one's already-wrong answer", 9.5, INK)
 
-    rule(ax, 57)
+    rule(ax, 61)
 
-    txt(ax, 6, 53.5, "Where those get called  —  $PNN.forward$", 12.5, INK, ha="left", w="bold")
-    code = [("def forward(self, x):", INK, "normal", ""),
-            ("    x = self.rearrange(x)", INK, "normal", "16 patches of 49 pixels"),
-            ("    ...", MUTE, "normal", ""),
-            ("    x = f_pat_small(x, *self.fc_small.parameters())", PHYS, "bold", "LAYER 1  ·  physics"),
-            ("    ...", MUTE, "normal", ""),
-            ("    x = f_pat_large(x, *self.fc_large.parameters())", PHYS, "bold", "LAYER 2  ·  physics"),
-            ("    return self.output_fac * x[:, -10:, 0]", INK, "normal", "the 10 class oscillators = the logits")]
-    for i, (line, c, w, note) in enumerate(code):
-        yy = 49 - i * 2.9
-        mono(ax, 10, yy, line, 10, c, w)
-        if note:
-            txt(ax, 74, yy, "←   " + note, 9.5, c if c != MUTE else MUTE, ha="left", st="italic")
+    txt(ax, 6, 57.6, "②  now the GRADIENTS, same setup — how far off is each method at n = 20?", 11.5, INK, ha="left", w="bold")
+    bars = [(50, "true gradient", "#999999", 1.2, "0% — the reference. This is D's ideal, free here only because the “device” is a formula"),
+            (43, "B — in-silico", BAD, 66, "33% off — exactly as wrong as its forward pass"),
+            (36, "PAT", PARAM, 21, "10.5% off  =  1.005²⁰ − 1 — ONLY the per-layer slope error. Nothing compounded.")]
+    for y, name, c, w, note in bars:
+        txt(ax, 24, y + 1.7, name, 10.5, c if c != "#999999" else MUTE, ha="right", w="bold")
+        box(ax, 26, y, w, 3.4, c, "#fdecec" if c == BAD else ("#e7f3ea" if c == PARAM else GREY_F), lw=1.4)
+        txt(ax, 28 + w, y + 1.7, note, 9.5, INK, ha="left")
+
+    txt(ax, 67.5, 30.4, "PAT does not FIX the gradient — it stops the error compounding:  exponential in depth  →  linear in depth.", 11, INK, w="bold")
 
     rule(ax, 27)
 
-    txt(ax, 6, 23.5, "So, per batch:", 12.5, INK, ha="left", w="bold")
-    txt(ax, 48, 19.6, "the FORWARD pass runs", 10.5, PHYS, w="bold")
-    txt(ax, 97, 19.6, "the BACKWARD pass runs", 10.5, DIGI, w="bold")
-    rows = [(r"layer 1   ·   100 oscillators", r"$f_{exp\_small}$   the device", r"$f_{model}$   at  $(x_0,\ C_1,\ e_1)$"),
-            (r"layer 2   ·   1610 oscillators", r"$f_{exp\_large}$   the device", r"$f_{model}$   at  $(x_1,\ C_2,\ e_2)$"),
-            ("the loss", r"$F.cross\_entropy$", "ordinary autograd — nothing special")]
-    for i, (stage, fwd, bwd) in enumerate(rows):
-        y = 17 - i * 4.4
-        if i % 2 == 0:
-            box(ax, 8, y - 2.1, 121, 4.2, "#f7f7f7", "#f7f7f7", lw=0.5, z=0)
-        txt(ax, 11, y, stage, 10.5, INK, ha="left")
-        txt(ax, 48, y, fwd, 10.5, PHYS)
-        txt(ax, 97, y, bwd, 10.5, DIGI)
+    box(ax, 6, 17.5, 123, 8, PARAM, PARAM_F, lw=1.8)
+    txt(ax, 67.5, 23.2, "✓   RESULT: with the same 0.5% modelling error, B's gradient is 33% wrong — PAT's stays at the irreducible 10.5% floor.", 11, PARAM, w="bold")
+    txt(ax, 67.5, 19.6, "trained on a toy target, in-silico's loss then drifts away from reality while PAT tracks it — Experiment 2 repeats this at scale.", 9.5, INK)
 
-    txt(ax, 67.5, 4.0, "$f_{model}$ appears zero times in $forward()$.    $f_{exp}$ appears zero times in $backward()$.",
-        12, INK, w="bold")
-    txt(ax, 67.5, 1.0, "Neither is a layer of the network — they are two directions through the same one.", 11, MUTE)
+    pdf.savefig(fig); plt.close(fig)
+
+
+# ═══════════════════════ 8 · experiment 2 ═══════════════════════
+def p_ex2(pdf):
+    fig = plt.figure(figsize=(13.5, 9.5)); ax = canvas(fig)
+    head(ax, 10, "Experiment 2 — PAT vs B",
+         "Fashion-MNIST. Same seed, same data order, same budget. The only difference is which function the forward pass runs through.", PART_TWO)
+
+    chain(ax, 68, 10, ("the spoiled ODE\nplays the device", PHYS, PHYS_F, 2.4, "-"))
+    txt(ax, 129, 79.8, "spoiled = 10% nonlinearity error + stray couplings the simulator knows nothing about", 8.5, PHYS, ha="right", st="italic")
+
+    arrow(ax, 50, 67.5, 50, 60.3, c=PHYS, lw=2.0)
+    ax.plot([122, 82], [63.5, 63.5], color="#555555", lw=1.4, ls=(0, (4, 2)), zorder=3)
+    ax.plot([82, 82], [63.5, 56.5], color="#555555", lw=1.4, ls=(0, (4, 2)), zorder=3)
+    arrow(ax, 82, 56.5, 75.8, 56.5, c=DIGI, lw=1.8)
+    box(ax, 44, 53, 31, 7, DIGI, DIGI_F, lw=2.0)
+    txt(ax, 59.5, 56.5, "the clean ODE  =  the simulator", 9, DIGI, w="bold")
+    arrow(ax, 43.5, 56.5, 37, 56.5, c=DIGI, lw=1.8)
+    ax.plot([37, 37], [56.5, 63.5], color="#555555", lw=1.4, ls=(0, (4, 2)), zorder=3)
+    arrow(ax, 37, 63.5, 12, 63.5, c="#555555", lw=1.4, ls=(0, (4, 2)))
+    txt(ax, 104, 65.7, "PAT's backward detour, as in Steps 4–5", 8.5, MUTE, st="italic")
+    txt(ax, 30, 60.9, "B instead runs the clean ODE in the plate's slot, both directions", 8.5, MUTE, st="italic")
+
+    rule(ax, 49.5)
+
+    txt(ax, 64, 45.6, "tested on the DEVICE", 10.5, PHYS, w="bold")
+    txt(ax, 64, 43.2, "what you actually get", 8.5, MUTE)
+    txt(ax, 101, 45.6, "tested on its own SIMULATOR", 10.5, DIGI, w="bold")
+    txt(ax, 101, 43.2, "what you would report", 8.5, MUTE)
+    txt(ax, 42, 38, "PAT", 12, PARAM, ha="right", w="bold")
+    txt(ax, 64, 38, "87.80%", 16, PARAM, w="bold")
+    txt(ax, 101, 38, "86.55%", 16, INK, w="bold")
+    txt(ax, 42, 31.5, "B — simulate both ways", 11, BAD, ha="right", w="bold")
+    txt(ax, 64, 31.5, "79.25%", 16, BAD, w="bold")
+    txt(ax, 101, 31.5, "87.55%", 16, WARN, w="bold")
+    txt(ax, 64, 27.2, "↑ reality: PAT wins by 8.55 points", 9.5, PARAM, w="bold")
+    txt(ax, 101, 27.2, "↑ in here, B looks BETTER — the inversion is total", 9.5, BAD, w="bold")
+
+    rule(ax, 24)
+
+    box(ax, 6, 15, 123, 7.5, PARAM, PARAM_F, lw=1.8)
+    txt(ax, 67.5, 18.8, "✓   RESULT: PAT's training-time numbers ARE its deployment numbers.  B never warns you — it hands you 87.55% and ships 79.25%.", 10.5, PARAM, w="bold")
+
+    txt(ax, 67.5, 10.4, "bonus finding: PAT's weights score HIGHER on their own device (88.85%) than on the clean model (86.60%) — they absorbed that unit's defects.", 9.5, INK)
+    txt(ax, 67.5, 7.4, "so trained weights belong to ONE physical machine: you ship the training procedure, not a weight file.", 9.5, MUTE)
+
+    pdf.savefig(fig); plt.close(fig)
+
+
+# ═══════════════════════ 9 · learnings ═══════════════════════
+def p_learn(pdf):
+    fig = plt.figure(figsize=(13.5, 9.5)); ax = canvas(fig)
+    head(ax, None, "Learnings", "the whole deck, one line per page.", ("SUMMARY", INK))
+
+    rows = [
+        ("A", BAD, "freeze the physical layer",
+         "half-works (reservoir computing) — but the knobs never learn, so the device is a random mixer, not a computer."),
+        ("B", BAD, "train against the simulator",
+         "0.5% of modelling error compounds to 33% over 20 layers — and it fails SILENTLY: everything looks excellent until deployment."),
+        ("C", PARAM, "PAT",
+         "run REALITY forward; ask the simulator only for SLOPES, taken at reality's values. The error stops compounding."),
+        ("D", BAD, "measure the gradient directly",
+         "exact, but one hardware run per knob per step — unaffordable. This is why C borrows B's simulator for its slopes."),
+        ("E", WARN, "wrap the whole device as one block",
+         "works — real forward, one simulator — but measured intermediates go unused. Wrap at the finest granularity you can measure."),
+        ("1", INK, "MNIST — the control",
+         "physics CAN learn: 98% with sin as the activation. Any nonlinearity works — “don't be linear” is the whole requirement."),
+        ("3", INK, "the toy function",
+         "the argument in three numbers: forward gap 33%, B's gradient 33%, PAT's gradient 10.5% = 1.005²⁰ − 1."),
+        ("2", INK, "Fashion-MNIST",
+         "PAT 87.80% vs B 79.25% on the device — while B reports 87.55% to itself. Ship the procedure, not the weights."),
+    ]
+    for k, (n, c, title, line) in enumerate(rows):
+        y = 76.5 - k * 7.7
+        bullet(ax, 10, y, n, c, r=2.6, size=12)
+        txt(ax, 15, y + 1.6, title, 12, c, ha="left", w="bold")
+        txt(ax, 15, y - 2, line, 10.5, INK, ha="left")
+        if k < 7:
+            ax.plot([6, 129], [y - 4.2, y - 4.2], color="#eeeeee", lw=1.0, zorder=0)
+
+    box(ax, 6, 3, 123, 8, PARAM, PARAM_F, lw=2.0)
+    txt(ax, 67.5, 7, "an approximate gradient applied to a real measurement beats an exact gradient applied to an imaginary one.", 12.5, PARAM, w="bold")
+
+    pdf.savefig(fig); plt.close(fig)
+
+
+# ═══════════════════════ 11 · taxonomy ═══════════════════════
+def p_tax(pdf):
+    fig = plt.figure(figsize=(13.5, 9.5)); ax = canvas(fig)
+    head(ax, None, "Taxonomy — the vocabulary, one entry each",
+         "come back here whenever a word stops making sense.", ("REFERENCE", INK))
+
+    def header(x, y, t):
+        txt(ax, x, y, t, 10, MUTE, ha="left", w="bold")
+        return y - 3.6
+
+    def entry(x, y, term, c, lines):
+        txt(ax, x, y, term, 9.5, c, ha="left", w="bold")
+        for i, ln in enumerate(lines):
+            txt(ax, x + 1.5, y - 2.4 - i * 2.3, ln, 8.5, INK, ha="left")
+        return y - 2.4 - len(lines) * 2.3 - 1.3
+
+    y = header(6, 80.5, "THE TRAINING LOOP")
+    y = entry(6, y, "logits", DIGI, ["the network's raw output scores, one per class"])
+    y = entry(6, y, "label", DIGI, ["the dataset's human-written right answer — used only in the loss"])
+    y = entry(6, y, "loss  (cross_entropy)", DIGI, ["ONE number: how wrong the logits are against the label"])
+    y = entry(6, y, "forward pass", DIGI, ["data flowing through the layers to produce the logits"])
+    y = entry(6, y, "backward pass", DIGI, ["the gradient walking back from the loss, layer by layer"])
+    y = entry(6, y, "gradient / slope", DIGI, ["per knob: which direction, and how strongly, turning it would",
+                                              "reduce the loss. A rate of change — never a value"])
+    y = entry(6, y, "autograd", DIGI, ["torch's bookkeeper — records every operation on the way forward,",
+                                       "replays the recording backwards"])
+    y = entry(6, y, "θ  (theta)", PARAM, ["all the trainable numbers, as floats on your computer.",
+                                          "Physically: the device's dial settings"])
+    y = entry(6, y, "optimizer.step()", PARAM, ["the ONLY place θ ever changes — each knob nudged along its gradient"])
+
+    y = header(6, y - 1.5, "ALSO SEEN")
+    y = entry(6, y, "in-silico", MUTE, ["“in software” — trained entirely against the simulator: option B"])
+    y = entry(6, y, "i₁, o₁, i₂, o₂", PHYS, ["layer inputs and outputs.  i₂ = o₁ is the JOINT;",
+                                            "every o is MEASURED on the device, and saved as the next i"])
+
+    y = header(70, 80.5, "THE PLAYERS")
+    y = entry(70, y, "the device / the plate  (f_exp)", PHYS, ["the physical object playing a layer — you can run it and",
+                                                               "measure it; nothing else. In this repo: a spoiled ODE"])
+    y = entry(70, y, "the simulator  (f_model / f_backward)", DIGI, ["code that predicts the device — built once, frozen, NOT part of",
+                                                                    "the network; PAT uses only its slopes. The paper calls it the",
+                                                                    "“differentiable digital model”"])
+    y = entry(70, y, "the gap", BAD, ["the DISAGREEMENT between device and simulator. Not an object:",
+                                      "zero in Ex1, a 0.5% coefficient in Ex3, deliberate spoilage in Ex2"])
+    y = entry(70, y, "the joint", PARAM, ["where one layer's output becomes the next layer's input — the only",
+                                          "place error compounds. PAT's rule: only measurements cross joints"])
+    y = entry(70, y, "saved inputs", PHYS, ["the (x, θ) a physical layer received going forward, kept so the",
+                                            "simulator's slope can be taken AT them"])
+    y = entry(70, y, "vjp", DIGI, ["vector–Jacobian product: run a function once, get its slope back.",
+                                   "Returns (prediction, gradient); PAT discards the prediction"])
+
+    y = header(70, y - 1.5, "THE PHYSICS")
+    y = entry(70, y, "ODE", PHYS, ["an equation giving rates of change, never outcomes.",
+                                   "“Integrating” = stepping it forward in small time slices —",
+                                   "hardware does that for free; the simulator does it in code"])
+    y = entry(70, y, "nonlinearity / activation", PHYS, ["the bend between layers — without one, stacked layers collapse",
+                                                         "into a single matrix. ANY bend works; sin is fine"])
 
     pdf.savefig(fig); plt.close(fig)
 
@@ -732,8 +680,7 @@ import sys
 from pathlib import Path
 
 OUT = Path(__file__).with_name("pat-diagram.pdf")
-PAGES = [p_summary, p_cast, p_loop, p_gradient, p_options, p_sim, p_pat, p_trace,
-         p_notebooks, p_repo, p_wiring]
+PAGES = [p_loop, p_optA, p_optB, p_optC, p_layers, p_optD, p_optE, p_ex1, p_ex3, p_ex2, p_learn, p_tax]
 if "--png" in sys.argv:
     class P:
         n = 0
